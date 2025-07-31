@@ -13,6 +13,13 @@ public class Ref : MonoBehaviour
     public Camera cam;
     public static Camera Camera { get { return Instance.cam; } }
 
+    public Camera battleCamera;
+    public static Camera BattleCamera {  get { return Instance.battleCamera; } }
+
+
+    public BattleManager battleManager;
+    public static BattleManager BattleManager {  get { return Instance.battleManager; } }
+
     private void Awake()
     {
         if(Instance == null)

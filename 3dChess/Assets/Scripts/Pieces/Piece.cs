@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Outline))]
-public abstract class Piece : MonoBehaviour
+public abstract class Piece : Entity
 {
     public bool isHeld;
     private Camera cam;
@@ -125,15 +125,34 @@ public abstract class Piece : MonoBehaviour
     }
 
     public void SubmitMove(Tile tile)
-    {
-        moves++;
+    {        
         if(tile.currentPiece != null)
         {
-            //TODO: Start battle
+            Ref.BattleManager.StartBattle(this, tile.currentPiece, tile);
             Destroy(tile.currentPiece.gameObject);
+            Ref.BattleManager.OnBattleEnd += BattleEndListener;
         }
-        tile.currentPiece = this;
-        orgTile.currentPiece = null;
-        orgTile = tile;
+        else
+        {
+            moves++;
+            tile.currentPiece = this;
+            orgTile.currentPiece = null;
+            orgTile = tile;
+        }       
+    }
+
+    public void BattleEndListener(bool winner, Tile tile)
+    {
+        if(!winner)
+        {
+            Tween.LocalPosition(transform, new Vector3(orgTile.transform.position.x, normalY, orgTile.transform.position.z), 0.25f, 0, Tween.EaseOut);
+        }
+        else
+        {
+            moves++;
+            tile.currentPiece = this;
+            orgTile.currentPiece = null;
+            orgTile = tile;
+        }
     }
 }
