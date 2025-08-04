@@ -20,6 +20,17 @@ public class Ref : MonoBehaviour
     public BattleManager battleManager;
     public static BattleManager BattleManager {  get { return Instance.battleManager; } }
 
+    public PieceUI orgPieceUI;
+    public static PieceUI OrgPieceUI {  get { return Instance.orgPieceUI; } }
+
+    public AI aI;
+    public static AI AI { get { return Instance.aI; } }
+
+
+    public BattleUI battleUI;
+    public static BattleUI BattleUI { get { return Instance.battleUI; } }
+
+
     private void Awake()
     {
         if(Instance == null)

@@ -14,7 +14,7 @@ public class Pawn : Piece
             int x = tile.x + newPos.Item1;
             int y = tile.y + newPos.Item2;
 
-            if (newPos.Item1 == 2 && moves >= 1) continue;
+            if (newPos.Item1 == 2 && movesCnt >= 1) continue;
             if (x < 0 || y < 0 || x > 7 || y > 7) continue;
 
             if (Ref.ManageTiles.GetTile(x, y).currentPiece == null)

@@ -1,0 +1,41 @@
+using System.Collections;
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class PieceUI : MonoBehaviour
+{
+    public TMP_Text T_PieceName;
+    public Slider S_Health;
+    public bool Type;
+    public Transform target;
+
+    public void Create(string name, int maxHealth, bool type)
+    {
+        T_PieceName.text = name;
+        S_Health.maxValue = maxHealth;
+        S_Health.value = maxHealth;
+        Type = type;
+    }
+
+    public void UpdateHealth(int newHealth)
+    {
+        S_Health.value = newHealth;
+    }
+
+    public void TakeDamage(int amount)
+    {
+        S_Health.value -= amount;
+    }
+
+    private void Update()
+    {
+        Transform target = Ref.Camera.transform;
+
+        Vector3 targetPosition = target.position;
+        targetPosition.z = transform.position.z;
+
+        transform.LookAt(targetPosition);
+    }
+}

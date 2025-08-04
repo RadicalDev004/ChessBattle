@@ -12,13 +12,21 @@ public abstract class Piece : Entity
     public Vector3 LastPoint;
     public bool animaiton = false;
     public float normalY;
-    public int moves = 0;
+    public int movesCnt = 0;
     public bool side = true; //true = white, false = black
     public Tile currentTile;
 
     public Tile orgTile;
     public List<Tile> Preview;
 
+    public PieceUI pieceUI;
+    public float pieceUIHeight;
+
+    
+    public override void UpdateUI()
+    {
+        pieceUI.UpdateHealth(Health);
+    }
     
 
     void Start()
@@ -26,6 +34,9 @@ public abstract class Piece : Entity
         cam = Ref.Camera;
         normalY = transform.position.y;
         Ref.ManageTiles.GetTile(Ref.ManageTiles.GetUnderTile(transform.position)).currentPiece = this;
+
+        ActivatePieceUI();
+        MakeMoves();
     }
 
     public abstract List<Tile> GetCurrentPreviewTiles(Tile tile);
@@ -128,13 +139,12 @@ public abstract class Piece : Entity
     {        
         if(tile.currentPiece != null)
         {
-            Ref.BattleManager.StartBattle(this, tile.currentPiece, tile);
-            Destroy(tile.currentPiece.gameObject);
+            Ref.BattleManager.StartBattle(this, tile.currentPiece, tile);           
             Ref.BattleManager.OnBattleEnd += BattleEndListener;
         }
         else
         {
-            moves++;
+            movesCnt++;
             tile.currentPiece = this;
             orgTile.currentPiece = null;
             orgTile = tile;
@@ -149,10 +159,26 @@ public abstract class Piece : Entity
         }
         else
         {
-            moves++;
+            Destroy(tile.currentPiece.gameObject);
+            movesCnt++;
             tile.currentPiece = this;
             orgTile.currentPiece = null;
             orgTile = tile;
         }
+    }
+
+    public void ActivatePieceUI()
+    {
+        pieceUI = Instantiate(Ref.OrgPieceUI);
+        pieceUI.transform.SetParent(transform);
+        pieceUI.transform.localPosition = new Vector3(0, 0, pieceUIHeight);
+        pieceUI.gameObject.SetActive(true);
+        //pieceUI.GetComponent<RectTransform>().localPosition = new Vector3(0, 0, 0.05f);
+        pieceUI.Create(Name == "" ? GetType().Name : Name, MaxHealth == 0 ? 100 : MaxHealth, true);
+    }
+
+    public void MakeMoves()
+    {
+        Moves = MovePool.Basic;
     }
 }
