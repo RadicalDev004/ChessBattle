@@ -34,6 +34,7 @@ public abstract class Piece : Entity
         cam = Ref.Camera;
         normalY = transform.position.y;
         Ref.ManageTiles.GetTile(Ref.ManageTiles.GetUnderTile(transform.position)).currentPiece = this;
+        currentTile = Ref.ManageTiles.GetTile(Ref.ManageTiles.GetUnderTile(transform.position));
 
         ActivatePieceUI();
         MakeMoves();
@@ -123,6 +124,7 @@ public abstract class Piece : Entity
 
         var tilePos = Ref.ManageTiles.GetTile(Ref.ManageTiles.GetUnderTile(transform.position));
         var tileToGo = tilePos != null && Preview.Contains(tilePos) ? tilePos : orgTile;
+        currentTile = tileToGo;
 
         Tween.LocalPosition(transform, new Vector3(tileToGo.transform.position.x, normalY, tileToGo.transform.position.z), 0.1f, 0, Tween.EaseOut);
         
@@ -174,7 +176,8 @@ public abstract class Piece : Entity
         pieceUI.transform.localPosition = new Vector3(0, 0, pieceUIHeight);
         pieceUI.gameObject.SetActive(true);
         //pieceUI.GetComponent<RectTransform>().localPosition = new Vector3(0, 0, 0.05f);
-        pieceUI.Create(Name == "" ? GetType().Name : Name, MaxHealth == 0 ? 100 : MaxHealth, true);
+        Name = Name == "" ? GetType().Name : Name;
+        pieceUI.Create(Name, MaxHealth == 0 ? 100 : MaxHealth, true);
     }
 
     public void MakeMoves()

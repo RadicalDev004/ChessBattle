@@ -14,6 +14,10 @@ public class BattleUI : MonoBehaviour
     public GameObject OrgMove;
     public List<GameObject> MoveUI;
     public GameObject PlayerUIOverlay, AttackUI, DialogueUI;
+
+    public GameObject Tab_SwitchPiece;
+    public List<SwitchPieceGraphic> SwitchPieces;
+    public SwitchPieceGraphic OriginalPieceGraphic;
     
 
     public void Create(BattleManager battleManager)
@@ -28,10 +32,10 @@ public class BattleUI : MonoBehaviour
         T_Lvl2.text = "lvl" + BattleManager.player2.Level.ToString();
 
         S_P1.maxValue = BattleManager.player1.MaxHealth;
-        S_P1.value = S_P1.maxValue;
+        S_P1.value = BattleManager.player1.Health;
 
         S_P2.maxValue = BattleManager.player2.MaxHealth;
-        S_P2.value = S_P2.maxValue;
+        S_P2.value = BattleManager.player2.Health;
 
         foreach(var m in BattleManager.player1.Moves)
         {
@@ -55,5 +59,32 @@ public class BattleUI : MonoBehaviour
         PlayerUIOverlay.SetActive(b);
         AttackUI.SetActive(b);
         DialogueUI.SetActive(!b);
+    }
+
+    public void ToggleSwitchPiece(bool b)
+    {
+        Tab_SwitchPiece.SetActive(b);
+        if (!b) return;
+
+        var pieces = Ref.BattleManager.player1Others;
+
+        foreach(var p in SwitchPieces)
+        {
+            Destroy(p.gameObject);
+        }
+        SwitchPieces.Clear();
+
+        foreach (var piece in pieces.Keys)
+        {
+            var spg = Instantiate(OriginalPieceGraphic, OriginalPieceGraphic.transform.parent);
+            spg.Create(piece.Name, piece.Level, piece.Health, piece.MaxHealth);
+            spg.gameObject.SetActive(true);
+            spg.GetComponent<Button>().onClick.AddListener(() =>
+            {
+                ToggleSwitchPiece(false);
+                Ref.BattleManager.SwitchPiece(piece, true);
+            });
+            SwitchPieces.Add(spg);
+        }
     }
 }

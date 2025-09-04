@@ -2,15 +2,17 @@ using Pixelplacement;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class BattleManager : MonoBehaviour
 {
     public BattleUI BattleUI;
+    public Dictionary<Entity, GameObject> player1Others = new(), player2Others = new();
     public Entity player1, player2;
     public GameObject P1, P2;
-    public Transform Pos1, Pos2;
+    public Transform Pos1, Pos2, Pos1Behind, Pos2Behind;
     public Tile contestedTile;
     public int Turn;
     public bool Winner;
@@ -26,17 +28,25 @@ public class BattleManager : MonoBehaviour
         contestedTile = t;
         Turn = 0;
 
-        P1 = Instantiate(player1.gameObject);
-        Destroy(P1.GetComponent<Piece>());
-        Destroy(P1.transform.GetChild(0).gameObject);
-        P1.transform.SetParent(transform);
-        P1.transform.position = new Vector3(Pos1.transform.position.x, P1.transform.position.y, Pos1.transform.position.z);
+        var player1others = FindObjectsOfType<Piece>().Where(e => e.side == ((Piece)e1).side && e.GetCurrentPreviewTiles(e.currentTile).Contains(t)).Cast<Entity>().ToList();
+        var player2others = FindObjectsOfType<Piece>().Where(e => e.side == ((Piece)e2).side && e.GetCurrentPreviewTiles(e.currentTile).Contains(t)).Cast<Entity>().ToList();
 
-        P2 = Instantiate(player2.gameObject);
-        Destroy(P2.GetComponent<Piece>());
-        Destroy(P2.transform.GetChild(0).gameObject);
-        P2.transform.SetParent(transform);
-        P2.transform.position = new Vector3(Pos2.transform.position.x, P2.transform.position.y, Pos2.transform.position.z);
+        player1Others.Clear();
+        player2Others.Clear();
+
+        P1 = CreateNewShowPiece(player1.gameObject, Pos1);
+        P2 = CreateNewShowPiece(player2.gameObject, Pos2);
+
+        foreach (var otherPiece in player1others)
+        {
+            var newPiece = CreateNewShowPiece(otherPiece.gameObject, Pos1Behind);
+            player1Others.Add(otherPiece, newPiece);
+        }
+        foreach (var otherPiece in player2others)
+        {
+            var newPiece = CreateNewShowPiece(otherPiece.gameObject, Pos2Behind);
+            player2Others.Add(otherPiece, newPiece);
+        }
 
         Ref.Camera.gameObject.SetActive(false);
         Ref.BattleCamera.gameObject.SetActive(true);
@@ -54,6 +64,9 @@ public class BattleManager : MonoBehaviour
         Ref.AI.Stop();
         player1.UpdateUI();
         player2.UpdateUI();
+
+        Destroy(P1);
+        Destroy(P2);
 
         OnBattleEnd?.Invoke(Winner, contestedTile);
     }
@@ -97,4 +110,46 @@ public class BattleManager : MonoBehaviour
             EndBattle();
         }
     }
+
+    public GameObject CreateNewShowPiece(GameObject p, Transform pos)
+    {
+        var newPiece = Instantiate(p);
+        Destroy(newPiece.GetComponent<Piece>());
+        Destroy(newPiece.transform.GetChild(0).gameObject);
+        newPiece.transform.SetParent(transform);
+        newPiece.transform.position = new Vector3(pos.transform.position.x, newPiece.transform.position.y, pos.transform.position.z);
+        return newPiece;
+    }
+
+    public void SwitchPiece(Entity e, bool side)
+    {
+        StartCoroutine(SwitchPieceCor(side ? player1 : player2, e, side ? P1 : P2, side ? player1Others[e] : player2Others[e], side ? Pos1 : Pos2, side ? Pos1Behind : Pos2Behind, side));
+    }
+
+    private IEnumerator SwitchPieceCor(Entity e1, Entity e2, GameObject P1, GameObject P2, Transform Pos1, Transform Pos2, bool side)
+    {
+        Tween.Position(P1.transform, Pos2.position, 0.5f, 0, Tween.EaseIn);
+        yield return new WaitForSeconds(0.75f);
+        Tween.Position(P2.transform, Pos1.position, 0.5f, 0, Tween.EaseOut);
+        yield return new WaitForSeconds(0.5f);
+
+        if (side)
+        {
+            player1 = e2;            
+            player1Others.Remove(e2);
+            player1Others.Add(e1, P1);
+            this.P1 = P2;
+        }
+        else
+        {
+            player2 = e2;
+            player2Others.Remove(e2);
+            player2Others.Add(e1, P1);
+            this.P2 = P2;
+        }
+        BattleUI.Create(this);
+        Turn++;
+        BattleUI.UpdateUI();
+    }
+
 }
