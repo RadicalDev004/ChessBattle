@@ -35,6 +35,7 @@ public abstract class Piece : Entity
         normalY = transform.position.y;
         Ref.ManageTiles.GetTile(Ref.ManageTiles.GetUnderTile(transform.position)).currentPiece = this;
         currentTile = Ref.ManageTiles.GetTile(Ref.ManageTiles.GetUnderTile(transform.position));
+        orgTile = currentTile;
 
         ActivatePieceUI();
         MakeMoves();
@@ -146,6 +147,7 @@ public abstract class Piece : Entity
         }
         else
         {
+            Debug.Log("No contest for tile.");
             movesCnt++;
             tile.currentPiece = this;
             orgTile.currentPiece = null;
@@ -155,6 +157,7 @@ public abstract class Piece : Entity
 
     public void BattleEndListener(bool winner, Tile tile)
     {
+        Debug.Log("Winner from piece: " + winner);
         if(!winner)
         {
             Tween.LocalPosition(transform, new Vector3(orgTile.transform.position.x, normalY, orgTile.transform.position.z), 0.25f, 0, Tween.EaseOut);

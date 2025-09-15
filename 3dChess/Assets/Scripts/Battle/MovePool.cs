@@ -9,4 +9,9 @@ public class MovePool : MonoBehaviour
         new Move("Heal", "Replenish some of the lost hitpoints.", MoveType.Heal, 80)
     };
 
+    public static Move GetRandomMove()
+    {
+        return Basic[Random.Range(0, Basic.Count - 1)];
+    }
+
 }

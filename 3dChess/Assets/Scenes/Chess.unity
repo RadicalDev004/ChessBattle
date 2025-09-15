@@ -3876,7 +3876,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
   m_AnchoredPosition: {x: 18.099976, y: 0.000030517578}
-  m_SizeDelta: {x: 185.79999, y: 50}
+  m_SizeDelta: {x: 185.8, y: 50}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1029229529
 MonoBehaviour:
@@ -5217,10 +5217,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BattleUI: {fileID: 1870742002}
-  player1Others: []
-  player2Others: []
-  P1Others: []
-  P2Others: []
   player1: {fileID: 0}
   player2: {fileID: 0}
   P1: {fileID: 0}
@@ -7663,7 +7659,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
   m_AnchoredPosition: {x: 14.099976, y: 100.00003}
-  m_SizeDelta: {x: 185.79999, y: 50}
+  m_SizeDelta: {x: 185.8, y: 50}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1941293731
 MonoBehaviour:

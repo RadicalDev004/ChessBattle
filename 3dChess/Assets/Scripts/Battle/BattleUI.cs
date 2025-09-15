@@ -37,6 +37,12 @@ public class BattleUI : MonoBehaviour
         S_P2.maxValue = BattleManager.player2.MaxHealth;
         S_P2.value = BattleManager.player2.Health;
 
+        foreach (var m in MoveUI)
+        {
+            Destroy(m);
+        }
+        MoveUI.Clear();
+
         foreach(var m in BattleManager.player1.Moves)
         {
             GameObject g = Instantiate(OrgMove, OrgMove.transform.parent);

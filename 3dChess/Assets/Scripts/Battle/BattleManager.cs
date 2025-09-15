@@ -68,6 +68,7 @@ public class BattleManager : MonoBehaviour
         Destroy(P1);
         Destroy(P2);
 
+        Debug.Log(Winner);
         OnBattleEnd?.Invoke(Winner, contestedTile);
     }
 

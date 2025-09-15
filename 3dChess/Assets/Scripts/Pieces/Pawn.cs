@@ -7,7 +7,7 @@ public class Pawn : Piece
     public List<(int, int)> pos = new() { (1, 0), (2, 0) };
     public override List<Tile> GetCurrentPreviewTiles(Tile tile)
     {
-        orgTile = tile;
+        //orgTile = tile;
         Preview.Clear();
         foreach (var newPos in pos)
         {

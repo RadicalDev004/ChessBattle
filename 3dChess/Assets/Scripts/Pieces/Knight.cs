@@ -7,7 +7,7 @@ public class Knight : Piece
     public List<(int, int)> pos = new() { (-1, 2), (1, 2), (2, 1), (2, -1) , (1, -2), (-1, -2), (-2, -1), (-2, 1)};
     public override List<Tile> GetCurrentPreviewTiles(Tile tile)
     {
-        orgTile = tile;
+        //orgTile = tile;
         Preview.Clear();
         foreach(var newPos in pos)
         {

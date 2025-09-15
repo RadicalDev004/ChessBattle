@@ -8,7 +8,7 @@ public class King : Piece
     public List<(int, int)> pos = new() { (1, -1), (1, 0), (1, 1), (0, 1), (-1, 1), (-1, 0), (-1, -1), (0, -1) };
     public override List<Tile> GetCurrentPreviewTiles(Tile tile)
     {
-        orgTile = tile;
+        //orgTile = tile;
         Preview.Clear();
 
         var allOppositePiecesAttacks = FindObjectsOfType<Piece>().Where(p => p.side != side).ToList();
