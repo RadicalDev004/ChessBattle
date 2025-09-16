@@ -23,6 +23,11 @@ public class EntityData
         King
     }
 
+    public EntityData()
+    {
+
+    }
+
     public EntityData(Entity entity)
     {
         Name = entity.Name;
@@ -37,9 +42,10 @@ public class EntityData
         }
     }
 
-    public EntityData(string Name, int Health, int MaxHealth, int Level, params Move[] Moves)
+    public EntityData(string Name, Type PieceType, int Health, int MaxHealth, int Level, params Move[] Moves)
     {
         this.Name = Name;
+        this.PieceType = PieceType;
         this.Health = Health;
         this.MaxHealth = MaxHealth;
         this.Level = Level;

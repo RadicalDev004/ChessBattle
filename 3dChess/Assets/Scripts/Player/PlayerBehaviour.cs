@@ -1,22 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using UnityEngine;
 
 public class PlayerBehaviour : MonoBehaviour
 {
-    public List<EntityData> PiecesInventory = new();
+    public Dictionary<int, EntityData> PiecesInventory = new();
 
     private void Awake()
     {
-        PiecesInventory = new();
         LoadPieces();
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.S))
+        if (Input.GetKeyDown(KeyCode.T))
         {
             SavePieces();
+        }
+        if(Input.GetKeyDown(KeyCode.G))
+        {
+            GiveLoadout();
         }
     }
 
@@ -24,17 +28,33 @@ public class PlayerBehaviour : MonoBehaviour
     {
         string piecesJson = PlayerPrefs.GetString("pieces");
         print(piecesJson);
-        InventoryData data = JsonUtility.FromJson<InventoryData>(piecesJson);
+        InventoryData data = JsonConvert.DeserializeObject<InventoryData>(piecesJson);
         PiecesInventory = data == null ? new() : data.Inventory;
+
+        if(PiecesInventory == null)
+            PiecesInventory = new();
+    }
+
+    public void GiveLoadout()
+    {
+        EntityData p1 = new("MyKing", EntityData.Type.King, 100, 100, 1, MovePool.GetRandomMove());
+        EntityData p2 = new("MyPawn", EntityData.Type.Pawn, 150, 150, 1, MovePool.GetRandomMove());
+        EntityData p3 = new("MyRook", EntityData.Type.Rook, 500, 500, 1, MovePool.GetRandomMove());
+
+        PiecesInventory.Add(1, p1);
+        PiecesInventory.Add(2, p2);
+        PiecesInventory.Add(3, p3);
+        print("Added");
     }
 
     public void SavePieces()
     {
+        print(PiecesInventory.Count);
         InventoryData data = new()
         {
             Inventory = PiecesInventory
         };
-        string json = JsonUtility.ToJson(data, true);
+        string json = JsonConvert.SerializeObject(data, Formatting.Indented);
         print(json);
         PlayerPrefs.SetString("pieces", json);
     }

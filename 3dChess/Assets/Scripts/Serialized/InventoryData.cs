@@ -6,5 +6,5 @@ using UnityEngine;
 [Serializable]
 public class InventoryData
 {
-    public List<EntityData> Inventory;
+    public Dictionary<int, EntityData> Inventory;
 }
