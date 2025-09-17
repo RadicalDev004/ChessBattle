@@ -41,11 +41,12 @@ public class LayoutEdit : MonoBehaviour
     {
         foreach(var p in player.PiecesInventory)
         {
+            if (p.Position == -1) continue;
             var newPieceGraphic = Instantiate(OrgPieceGraphic, LayoutParent.transform);
-            newPieceGraphic.Create(p.Value, p.Key);
+            newPieceGraphic.Create(p, p.Position);
             newPieceGraphic.LayoutEdit = this;
 
-            newPieceGraphic.GetComponent<RectTransform>().localPosition = Squares[p.Key].GetComponent<RectTransform>().localPosition;
+            newPieceGraphic.GetComponent<RectTransform>().localPosition = Squares[p.Position].GetComponent<RectTransform>().localPosition;
             newPieceGraphic.gameObject.SetActive(true);
             PieceGraphics.Add(newPieceGraphic);
         }
@@ -55,7 +56,7 @@ public class LayoutEdit : MonoBehaviour
     {
         for (int i = 0; i < 4 * 8; i++)
         {
-            if (IsInsideSquare(pos, Squares[i].GetComponent<RectTransform>().localPosition, 80) && !player.PiecesInventory.ContainsKey(i))
+            if (IsInsideSquare(pos, Squares[i].GetComponent<RectTransform>().localPosition, 80) && player.PiecesInventory.Find(e => e.Position == i) != null)
                 return i;
         }
         return -1;

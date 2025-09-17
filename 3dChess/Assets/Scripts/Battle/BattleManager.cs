@@ -57,6 +57,7 @@ public class BattleManager : MonoBehaviour
 
     public void EndBattle()
     {
+       
         BattleUI.gameObject.SetActive(false);
 
         Ref.Camera.gameObject.SetActive(true);

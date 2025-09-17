@@ -8,6 +8,7 @@ public class EntityData
 {
     public string Name;
     public Type PieceType;
+    public int Position;
     public int Health;
     public int MaxHealth;
     public int Level;
@@ -42,10 +43,11 @@ public class EntityData
         }
     }
 
-    public EntityData(string Name, Type PieceType, int Health, int MaxHealth, int Level, params Move[] Moves)
+    public EntityData(string Name, Type PieceType, int Position, int Health, int MaxHealth, int Level, params Move[] Moves)
     {
         this.Name = Name;
         this.PieceType = PieceType;
+        this.Position = Position;
         this.Health = Health;
         this.MaxHealth = MaxHealth;
         this.Level = Level;

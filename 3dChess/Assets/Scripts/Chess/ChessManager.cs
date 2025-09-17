@@ -7,9 +7,12 @@ public class ChessManager : MonoBehaviour
 {
     
     public List<Piece> OrgPieces = new();
+    public static int Turn = 0;
+
     private void Start()
     {
         PreparePieces();
+        Turn = 0;
     }
 
     public void PreparePieces()
@@ -17,24 +20,26 @@ public class ChessManager : MonoBehaviour
         string white = PlayerPrefs.GetString("pieces");
         string black = PlayerPrefs.GetString("trainer");
 
-        InventoryData whiteData = JsonConvert.DeserializeObject<InventoryData>(white);
-        InventoryData blackData = JsonConvert.DeserializeObject<InventoryData>(black);
-
         print(white);
         print(black);
 
-        foreach(var pair in whiteData.Inventory)
+        InventoryData whiteData = JsonConvert.DeserializeObject<InventoryData>(white);
+        InventoryData blackData = JsonConvert.DeserializeObject<InventoryData>(black);        
+
+        foreach(var piece in whiteData.Inventory)
         {
-            var p = Instantiate(OrgPieces[(int)pair.Value.PieceType]);
+            if (piece.Position == -1) continue;
+            var p = Instantiate(OrgPieces[(int)piece.PieceType]);
             p.gameObject.SetActive(true);
-            p.Create(pair.Key, pair.Value);
+            p.Create(piece.Position, piece);
         }
 
-        foreach (var pair in blackData.Inventory)
+        foreach (var piece in blackData.Inventory)
         {
-            var p = Instantiate(OrgPieces[(int)pair.Value.PieceType]);
+            if (piece.Position == -1) continue;
+            var p = Instantiate(OrgPieces[(int)piece.PieceType]);
             p.gameObject.SetActive(true);
-            p.Create(64 - pair.Key, pair.Value);
+            p.Create(64 - piece.Position, piece);
             p.side = false;
         }
     }

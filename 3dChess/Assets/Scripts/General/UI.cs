@@ -1,18 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class UI : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public GameObject B_BattleTrainer;
+
+    public void ShowBattleTrainerButton(string trainerName)
     {
-        
+        B_BattleTrainer.transform.Find("name").GetComponent<TMP_Text>().text = trainerName;
+        B_BattleTrainer.SetActive(true);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public void HideBattleTrainerBUtton() => B_BattleTrainer.SetActive(false);
 }

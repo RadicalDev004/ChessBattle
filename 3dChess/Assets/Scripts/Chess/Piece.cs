@@ -106,6 +106,7 @@ public abstract class Piece : Entity
 
     private IEnumerator OnMouseDownCor()
     {
+        if(side != (ChessManager.Turn % 2 == 0)) yield break;
         if (animaiton) yield break;
 
         animaiton = true;
@@ -155,8 +156,9 @@ public abstract class Piece : Entity
     }
 
     public void SubmitMove(Tile tile)
-    {        
-        if(tile.currentPiece != null)
+    {
+        ChessManager.Turn++;
+        if (tile.currentPiece != null)
         {
             Ref.BattleManager.StartBattle(this, tile.currentPiece, tile);           
             Ref.BattleManager.OnBattleEnd += BattleEndListener;

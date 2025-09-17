@@ -6,9 +6,10 @@ using UnityEngine.SceneManagement;
 
 public class PlayerBehaviour : MonoBehaviour
 {
-    public Dictionary<int, EntityData> PiecesInventory = new();
+    public List<EntityData> PiecesInventory = new();
+    [HideInInspector]
     public Trainer TrainerInRange;
-
+    public UI UI;
     private void Awake()
     {
         LoadPieces();
@@ -25,10 +26,18 @@ public class PlayerBehaviour : MonoBehaviour
             GiveLoadout();
         }
 
-        if (TrainerInRange != null && Input.GetKeyDown(KeyCode.Space))
+        if (TrainerInRange != null)
         {
-            PlayerPrefs.SetString("trainer", TrainerInRange.PiecesJson);
-            SceneManager.LoadScene("Chess");
+            UI.ShowBattleTrainerButton(TrainerInRange.Name);
+            if(Input.GetKeyDown(KeyCode.Space))
+            {
+                PlayerPrefs.SetString("trainer", TrainerInRange.PiecesJson);
+                SceneManager.LoadScene("Chess");
+            }            
+        }
+        else
+        {
+            UI.HideBattleTrainerBUtton();
         }
     }
 
@@ -45,13 +54,14 @@ public class PlayerBehaviour : MonoBehaviour
 
     public void GiveLoadout()
     {
-        EntityData p1 = new("MyKing", EntityData.Type.King, 100, 100, 1, MovePool.GetRandomMove());
-        EntityData p2 = new("MyPawn", EntityData.Type.Pawn, 150, 150, 1, MovePool.GetRandomMove());
-        EntityData p3 = new("MyRook", EntityData.Type.Rook, 500, 500, 1, MovePool.GetRandomMove());
+        PiecesInventory.Clear();
+        EntityData p1 = new("MyKing", EntityData.Type.King, 1, 100, 100, 1, MovePool.GetRandomMove());
+        EntityData p2 = new("MyPawn", EntityData.Type.Pawn, 2, 150, 150, 1, MovePool.GetRandomMove());
+        EntityData p3 = new("MyRook", EntityData.Type.Rook, 3, 500, 500, 1, MovePool.GetRandomMove());
 
-        PiecesInventory.Add(1, p1);
-        PiecesInventory.Add(2, p2);
-        PiecesInventory.Add(3, p3);
+        PiecesInventory.Add(p1);
+        PiecesInventory.Add(p2);
+        PiecesInventory.Add(p3);
         print("Added");
     }
 
@@ -69,12 +79,8 @@ public class PlayerBehaviour : MonoBehaviour
 
     public void ChangePiecePosition(int oldPos, int newPos)
     {
-        if (PiecesInventory.TryGetValue(oldPos, out EntityData e))
-        {
-            PiecesInventory.Remove(oldPos);
-            PiecesInventory.Add(newPos, e);
-            print("Changing piece pos: " + oldPos + " to " + newPos);
-        }
+        var found = PiecesInventory.Find(e => e.Position == oldPos);
+        found.Position = newPos;
     }
 
     private void OnTriggerEnter(Collider other)
