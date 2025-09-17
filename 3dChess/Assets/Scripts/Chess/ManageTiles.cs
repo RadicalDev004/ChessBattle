@@ -23,6 +23,18 @@ public class ManageTiles : MonoBehaviour
         MakeTiles();
     }
 
+    public Tile GetTile(int index)
+    {
+        try
+        {
+            return Tiles[index / 8][index % 8];
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
     public Tile GetTile(int x, int y)
     {
         try

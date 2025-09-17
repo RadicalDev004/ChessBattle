@@ -63,4 +63,9 @@ public class Queen : Piece
 
         return Preview;
     }
+
+    public override List<Tile> GetCurrentAttackTiles(Tile tile)
+    {
+        return GetCurrentPreviewTiles(tile);
+    }
 }

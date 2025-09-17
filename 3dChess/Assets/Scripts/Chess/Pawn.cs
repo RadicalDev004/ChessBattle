@@ -19,6 +19,8 @@ public class Pawn : Piece
 
             if (Ref.ManageTiles.GetTile(x, y).currentPiece == null)
                 Preview.Add(Ref.ManageTiles.GetTile(x, y));
+            else
+                break;
         }
 
         List<(int, int)> attack = new() { (1, -1), (1, 1) };
@@ -30,6 +32,24 @@ public class Pawn : Piece
             if (x < 0 || y < 0 || x > 7 || y > 7) continue;
             if(Ref.ManageTiles.GetTile(x, y).currentPiece != null && Ref.ManageTiles.GetTile(x, y).currentPiece.side != side)
                 Preview.Add(Ref.ManageTiles.GetTile(x, y));
+        }
+
+        return Preview;
+    }
+
+    public override List<Tile> GetCurrentAttackTiles(Tile tile)
+    {
+        //orgTile = tile;
+        Preview.Clear();
+
+        List<(int, int)> attack = new() { (1, -1), (1, 1) };
+        foreach (var attackPos in attack)
+        {
+            int x = tile.x + attackPos.Item1;
+            int y = tile.y + attackPos.Item2;
+
+            if (x < 0 || y < 0 || x > 7 || y > 7) continue;
+            Preview.Add(Ref.ManageTiles.GetTile(x, y));
         }
 
         return Preview;

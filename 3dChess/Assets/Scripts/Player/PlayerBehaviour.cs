@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerBehaviour : MonoBehaviour
 {
     public Dictionary<int, EntityData> PiecesInventory = new();
+    public Trainer TrainerInRange;
 
     private void Awake()
     {
@@ -21,6 +23,12 @@ public class PlayerBehaviour : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.G))
         {
             GiveLoadout();
+        }
+
+        if (TrainerInRange != null && Input.GetKeyDown(KeyCode.Space))
+        {
+            PlayerPrefs.SetString("trainer", TrainerInRange.PiecesJson);
+            SceneManager.LoadScene("Chess");
         }
     }
 
@@ -66,6 +74,22 @@ public class PlayerBehaviour : MonoBehaviour
             PiecesInventory.Remove(oldPos);
             PiecesInventory.Add(newPos, e);
             print("Changing piece pos: " + oldPos + " to " + newPos);
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.TryGetComponent(out Trainer t))
+        {
+            TrainerInRange = t;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.TryGetComponent(out Trainer t))
+        {
+            TrainerInRange = null;
         }
     }
 }

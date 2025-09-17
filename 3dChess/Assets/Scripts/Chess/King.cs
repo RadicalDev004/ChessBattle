@@ -11,11 +11,11 @@ public class King : Piece
         //orgTile = tile;
         Preview.Clear();
 
-        var allOppositePiecesAttacks = FindObjectsOfType<Piece>().Where(p => p.side != side).ToList();
+        var allOppositePiecesAttacks = FindObjectsOfType<Piece>().Where(p => p.side != side && p.gameObject.activeInHierarchy && p.GetType() != typeof(King)).ToList();
         List<Tile> attackTiles = new();
         foreach(var p in allOppositePiecesAttacks)
         {
-            attackTiles.AddRange(p.GetCurrentPreviewTiles(Ref.ManageTiles.GetTile(Ref.ManageTiles.GetUnderTile(p.transform.position))));
+            attackTiles.AddRange(p.GetCurrentAttackTiles(Ref.ManageTiles.GetTile(Ref.ManageTiles.GetUnderTile(p.transform.position))));
         }
 
         foreach (var newPos in pos)
@@ -31,5 +31,10 @@ public class King : Piece
         }
 
         return Preview;
+    }
+
+    public override List<Tile> GetCurrentAttackTiles(Tile tile)
+    {
+        return GetCurrentPreviewTiles(tile);
     }
 }

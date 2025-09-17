@@ -31,17 +31,33 @@ public abstract class Piece : Entity
 
     void Start()
     {
+        
+    }
+
+    public void Create(int index, EntityData e)
+    {
+        var tile = Ref.ManageTiles.GetTile(index);
+
         cam = Ref.Camera;
         normalY = transform.position.y;
-        Ref.ManageTiles.GetTile(Ref.ManageTiles.GetUnderTile(transform.position)).currentPiece = this;
-        currentTile = Ref.ManageTiles.GetTile(Ref.ManageTiles.GetUnderTile(transform.position));
+
+        tile.currentPiece = this;
+        currentTile = tile;
         orgTile = currentTile;
+        transform.position = new Vector3(tile.transform.position.x, normalY, tile.transform.position.z);
 
         ActivatePieceUI();
-        MakeMoves();
+
+        Name = e.Name;
+        MaxHealth = e.MaxHealth;
+        Health = e.Health;
+        Level = e.Level;
+        Moves = e.Moves;
+        //MakeMoves();
     }
 
     public abstract List<Tile> GetCurrentPreviewTiles(Tile tile);
+    public abstract List<Tile> GetCurrentAttackTiles(Tile tile);
 
     void Update()
     {
@@ -185,6 +201,6 @@ public abstract class Piece : Entity
 
     public void MakeMoves()
     {
-        Moves = MovePool.Basic;
+        //Moves = MovePool.Basic;
     }
 }

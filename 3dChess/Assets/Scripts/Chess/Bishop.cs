@@ -36,4 +36,9 @@ public class Bishop : Piece
         }
         return Preview;
     }
+
+    public override List<Tile> GetCurrentAttackTiles(Tile tile)
+    {
+        return GetCurrentPreviewTiles(tile);
+    }
 }
