@@ -39,8 +39,8 @@ public class ChessManager : MonoBehaviour
             if (piece.Position == -1) continue;
             var p = Instantiate(OrgPieces[(int)piece.PieceType]);
             p.gameObject.SetActive(true);
-            p.Create(64 - piece.Position, piece);
             p.side = false;
+            p.Create(64 - piece.Position, piece);           
         }
     }
 }

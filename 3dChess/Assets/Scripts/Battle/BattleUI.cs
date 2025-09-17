@@ -51,6 +51,7 @@ public class BattleUI : MonoBehaviour
             g.SetActive(true);
             g.GetComponent<Button>().onClick.AddListener(() => { BattleManager.ProcessMove(m); });
         }
+        UpdateUI();
     }
 
     public void UpdateHealth()

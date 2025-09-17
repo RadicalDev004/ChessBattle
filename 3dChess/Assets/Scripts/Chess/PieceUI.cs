@@ -9,14 +9,16 @@ public class PieceUI : MonoBehaviour
     public TMP_Text T_PieceName;
     public Slider S_Health;
     public bool Type;
+    public Color C1, C2;
     public Transform target;
 
-    public void Create(string name, int maxHealth, bool type)
+    public void Create(string name, int health, int maxHealth, bool type)
     {
         T_PieceName.text = name;
         S_Health.maxValue = maxHealth;
-        S_Health.value = maxHealth;
+        S_Health.value = health;
         Type = type;
+        S_Health.fillRect.GetComponentInChildren<Image>().color = Type ? C1 : C2;
     }
 
     public void UpdateHealth(int newHealth)

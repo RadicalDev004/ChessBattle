@@ -6,7 +6,7 @@ public class Rook : Piece
 {
     public override List<Tile> GetCurrentPreviewTiles(Tile tile)
     {
-        orgTile = tile;
+        //orgTile = tile;
         Preview.Clear();
 
         for (int x = tile.x + 1; x <= 7; x++)

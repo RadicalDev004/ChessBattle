@@ -19,14 +19,14 @@ public class BattleManager : MonoBehaviour
 
     public Action<bool, Tile> OnBattleEnd;
 
-    public void StartBattle(Entity e1, Entity e2, Tile t)
+    public void StartBattle(Entity e1, Entity e2, Tile t, bool start)
     {
-        Ref.AI.Create();
+        Ref.AI.Create();     
         OnBattleEnd = null;
-        player1 = e1;
-        player2 = e2;
+        player1 = ((Piece)e1).side ? e1 : e2;
+        player2 = ((Piece)e1).side ? e2 : e1;
         contestedTile = t;
-        Turn = 0;
+        Turn = start ? 0 : 1;
 
         var player1others = FindObjectsOfType<Piece>().Where(e => e.side == ((Piece)e1).side && e.GetCurrentPreviewTiles(e.currentTile).Contains(t)).Cast<Entity>().ToList();
         var player2others = FindObjectsOfType<Piece>().Where(e => e.side == ((Piece)e2).side && e.GetCurrentPreviewTiles(e.currentTile).Contains(t)).Cast<Entity>().ToList();
@@ -53,6 +53,7 @@ public class BattleManager : MonoBehaviour
 
         BattleUI.gameObject.SetActive(true);
         BattleUI.Create(this);
+        
     }
 
     public void EndBattle()

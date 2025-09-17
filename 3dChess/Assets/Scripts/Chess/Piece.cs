@@ -44,15 +44,15 @@ public abstract class Piece : Entity
         tile.currentPiece = this;
         currentTile = tile;
         orgTile = currentTile;
-        transform.position = new Vector3(tile.transform.position.x, normalY, tile.transform.position.z);
-
-        ActivatePieceUI();
+        transform.position = new Vector3(tile.transform.position.x, normalY, tile.transform.position.z);      
 
         Name = e.Name;
         MaxHealth = e.MaxHealth;
         Health = e.Health;
         Level = e.Level;
         Moves = e.Moves;
+
+        ActivatePieceUI();
         //MakeMoves();
     }
 
@@ -160,7 +160,7 @@ public abstract class Piece : Entity
         ChessManager.Turn++;
         if (tile.currentPiece != null)
         {
-            Ref.BattleManager.StartBattle(this, tile.currentPiece, tile);           
+            Ref.BattleManager.StartBattle(this, tile.currentPiece, tile, side);           
             Ref.BattleManager.OnBattleEnd += BattleEndListener;
         }
         else
@@ -198,7 +198,7 @@ public abstract class Piece : Entity
         pieceUI.gameObject.SetActive(true);
         //pieceUI.GetComponent<RectTransform>().localPosition = new Vector3(0, 0, 0.05f);
         Name = Name == "" ? GetType().Name : Name;
-        pieceUI.Create(Name, MaxHealth == 0 ? 100 : MaxHealth, true);
+        pieceUI.Create(Name, Health, MaxHealth, side);
     }
 
     public void MakeMoves()
