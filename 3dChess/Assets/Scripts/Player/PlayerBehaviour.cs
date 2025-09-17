@@ -58,4 +58,14 @@ public class PlayerBehaviour : MonoBehaviour
         print(json);
         PlayerPrefs.SetString("pieces", json);
     }
+
+    public void ChangePiecePosition(int oldPos, int newPos)
+    {
+        if (PiecesInventory.TryGetValue(oldPos, out EntityData e))
+        {
+            PiecesInventory.Remove(oldPos);
+            PiecesInventory.Add(newPos, e);
+            print("Changing piece pos: " + oldPos + " to " + newPos);
+        }
+    }
 }
