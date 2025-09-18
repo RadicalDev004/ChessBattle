@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [Serializable]
@@ -11,7 +12,24 @@ public class EntityData
     public int Position;
     public int Health;
     public int MaxHealth;
-    public int Level;
+    
+    public int Attack; // max 10
+    public int Speed; // max 10
+    public int Luck; // max 10
+
+    public int Level {
+        get
+        {
+            return Entity.Tresholds.Where(t => t <= Exp).DefaultIfEmpty(0).Max();
+        }
+        set
+        {
+
+        }
+    }
+    
+    public float Exp;
+
     public List<Move> Moves = new();
 
     public enum Type

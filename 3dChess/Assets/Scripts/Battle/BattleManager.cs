@@ -98,6 +98,9 @@ public class BattleManager : MonoBehaviour
         if(m.Type == MoveType.Attack)
         {
             defender.Health -= (int)m.Action;
+            attacker.GiveExp(m.Action / 10);
+            if (defender.Health <= 0)
+                attacker.GiveExp(30);
         }
         else if(m.Type == MoveType.Heal)
         {
@@ -110,6 +113,13 @@ public class BattleManager : MonoBehaviour
         if(player1.Health <= 0 || player2.Health <= 0)
         {
             Winner = player2.Health <= 0;
+            foreach (var pair in (Winner ? player1Others : player2Others))
+            {
+                pair.Key.GiveExp(15);
+            }
+            var winnerPiece = Winner ? player1 : player2;
+            winnerPiece.GiveExp(15);
+            
             EndBattle();
         }
     }

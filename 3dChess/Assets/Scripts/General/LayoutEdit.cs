@@ -20,6 +20,8 @@ public class LayoutEdit : MonoBehaviour
     public ListPieceUI OrgListPiece;
 
     public TMP_Text T_Limit;
+    public TMP_Text T_Warning;
+
     public int Limit = 8;
 
     public Color C1, C2;
@@ -121,5 +123,40 @@ public class LayoutEdit : MonoBehaviour
     public void UpdateAllListPieces()
     {
         ListPiecesUI.ForEach(p => { p.UpdateOutline(); });
+    }
+
+    public void CloseTab(CanvasGroup Tab_Layout)
+    {
+        if(PieceGraphics.Where(p => p.thisEntity.PieceType == EntityData.Type.King).Count() == 0)
+        {
+            ShowWarning("Loadout has no Kings!");
+            return;
+        }
+        if (PieceGraphics.Where(p => p.thisEntity.PieceType == EntityData.Type.King).Count() > 1)
+        {
+            ShowWarning("Loadout has more than one King!");
+            return;
+        }
+
+        Tab_Layout.alpha = 0;
+        Tab_Layout.interactable = false;
+        Tab_Layout.blocksRaycasts = false;
+        player.SavePieces();
+    }
+
+
+    private Coroutine warningCor;
+    public void ShowWarning(string text)
+    {
+        if(warningCor != null)
+            StopCoroutine(warningCor);
+        warningCor = StartCoroutine(ShowWarningCor(text, 2));
+    }
+
+    private IEnumerator ShowWarningCor(string text, float time)
+    {
+        T_Warning.text = text;
+        yield return new WaitForSecondsRealtime(time);
+        T_Warning.text = "";
     }
 }

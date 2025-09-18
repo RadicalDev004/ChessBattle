@@ -18,6 +18,10 @@ public class ViewPiece : MonoBehaviour
     public TMP_Text T_Level, T_Type;
     public Slider S_Health;
 
+    public MoveUI OriginalMoveUI;   
+    public GameObject MovesParent;
+    public List<MoveUI> CurrentMoves;
+
     [Header("Models")]
     public List<GameObject> Pieces;
     public GameObject CurrentPiece;
@@ -57,6 +61,20 @@ public class ViewPiece : MonoBehaviour
         CurrentPiece.transform.localPosition = PodiumPos;
         CurrentPiece.SetActive(true);
         State = true;
+
+        foreach(var m in CurrentMoves)
+        {
+            Destroy(m.gameObject);
+        }
+        CurrentMoves.Clear();
+
+        foreach(var m in e.Moves)
+        {
+            var newMoveUI = Instantiate(OriginalMoveUI, MovesParent.transform);
+            CurrentMoves.Add(newMoveUI);
+            newMoveUI.gameObject.SetActive(true);
+            newMoveUI.Create(m);           
+        }
     }
 
     public void CloseViewPiece()

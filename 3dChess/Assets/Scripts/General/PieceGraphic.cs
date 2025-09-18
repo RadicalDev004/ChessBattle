@@ -11,8 +11,8 @@ public class PieceGraphic : MonoBehaviour, IDragHandler,IEndDragHandler
     public bool isHeld;
     [HideInInspector]
     public RectTransform rectTransform;
-
-    private EntityData thisEntity;
+    [HideInInspector]
+    public EntityData thisEntity;
     public int position = -1;
     [HideInInspector]
     public LayoutEdit LayoutEdit;

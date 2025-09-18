@@ -1,13 +1,14 @@
 using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ChessManager : MonoBehaviour
-{
-    
+{    
     public List<Piece> OrgPieces = new();
     public static int Turn = 0;
+    public List<Piece> WhitePieces = new(), BlackPieces = new();
 
     private void Start()
     {
@@ -29,18 +30,37 @@ public class ChessManager : MonoBehaviour
         foreach(var piece in whiteData.Inventory)
         {
             if (piece.Position == -1) continue;
+
             var p = Instantiate(OrgPieces[(int)piece.PieceType]);
             p.gameObject.SetActive(true);
+            p.Data = piece;
             p.Create(piece.Position, piece);
+            
+            WhitePieces.Add(p);
         }
 
         foreach (var piece in blackData.Inventory)
         {
             if (piece.Position == -1) continue;
+
             var p = Instantiate(OrgPieces[(int)piece.PieceType]);
             p.gameObject.SetActive(true);
             p.side = false;
-            p.Create(64 - piece.Position, piece);           
+            p.Data = piece;
+            p.Create(64 - piece.Position, piece); 
+            
+            BlackPieces.Add(p);
         }
+    }
+
+    public void EndGame()
+    {
+        InventoryData whiteData = new()
+        {
+            Inventory = WhitePieces.Select(p => p.Data).ToList()
+        };
+
+        string json = JsonConvert.SerializeObject(whiteData, Formatting.Indented);
+        PlayerPrefs.SetString("pieces", json);
     }
 }
