@@ -27,4 +27,18 @@ public class Knight : Piece
         return GetCurrentPreviewTiles(tile);
     }
 
+    public override List<Tile> GetCurrentHelpingTiles(Tile tile)
+    {
+        Preview.Clear();
+        foreach (var newPos in pos)
+        {
+            int x = tile.x + newPos.Item1;
+            int y = tile.y + newPos.Item2;
+
+            if (x < 0 || y < 0 || x > 7 || y > 7) continue;
+
+            Preview.Add(Ref.ManageTiles.GetTile(x, y));
+        }
+        return Preview;
+    }
 }

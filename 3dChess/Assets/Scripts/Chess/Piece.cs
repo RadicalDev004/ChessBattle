@@ -58,6 +58,7 @@ public abstract class Piece : Entity
 
     public abstract List<Tile> GetCurrentPreviewTiles(Tile tile);
     public abstract List<Tile> GetCurrentAttackTiles(Tile tile);
+    public abstract List<Tile> GetCurrentHelpingTiles(Tile tile);
 
     void Update()
     {

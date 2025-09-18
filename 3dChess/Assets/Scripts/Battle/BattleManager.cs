@@ -28,8 +28,8 @@ public class BattleManager : MonoBehaviour
         contestedTile = t;
         Turn = start ? 0 : 1;
 
-        var player1others = FindObjectsOfType<Piece>().Where(e => e.side == ((Piece)e1).side && e.GetCurrentPreviewTiles(e.currentTile).Contains(t)).Cast<Entity>().ToList();
-        var player2others = FindObjectsOfType<Piece>().Where(e => e.side == ((Piece)e2).side && e.GetCurrentPreviewTiles(e.currentTile).Contains(t)).Cast<Entity>().ToList();
+        var player1others = FindObjectsOfType<Piece>().Where(e => e.side == ((Piece)player1).side && e.GetCurrentHelpingTiles(e.currentTile).Contains(t) && e.gameObject.activeInHierarchy && e != player1).Cast<Entity>().ToList();
+        var player2others = FindObjectsOfType<Piece>().Where(e => e.side == ((Piece)player2).side && e.GetCurrentHelpingTiles(e.currentTile).Contains(t) && e.gameObject.activeInHierarchy && e != player2).Cast<Entity>().ToList();
 
         player1Others.Clear();
         player2Others.Clear();

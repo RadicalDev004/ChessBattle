@@ -41,4 +41,36 @@ public class Bishop : Piece
     {
         return GetCurrentPreviewTiles(tile);
     }
+
+    public override List<Tile> GetCurrentHelpingTiles(Tile tile)
+    {
+        Preview.Clear();
+
+        for (int x = tile.x + 1, y = tile.y + 1; x <= 7 && y <= 7; x++, y++)
+        {
+            Preview.Add(Ref.ManageTiles.GetTile(x, y));
+            if (Ref.ManageTiles.GetTile(x, y).currentPiece != null) break;
+            if (Ref.ManageTiles.GetTile(x, y).currentPiece != null && Ref.ManageTiles.GetTile(x, y).currentPiece.side == side) break;
+        }
+        for (int x = tile.x - 1, y = tile.y + 1; x >= 0 && y <= 7; x--, y++)
+        {
+            Preview.Add(Ref.ManageTiles.GetTile(x, y));
+            if (Ref.ManageTiles.GetTile(x, y).currentPiece != null) break;
+            if (Ref.ManageTiles.GetTile(x, y).currentPiece != null && Ref.ManageTiles.GetTile(x, y).currentPiece.side == side) break;
+        }
+
+        for (int x = tile.x + 1, y = tile.y - 1; x <= 7 && y >= 0; x++, y--)
+        {
+            Preview.Add(Ref.ManageTiles.GetTile(x, y));
+            if (Ref.ManageTiles.GetTile(x, y).currentPiece != null) break;
+            if (Ref.ManageTiles.GetTile(x, y).currentPiece != null && Ref.ManageTiles.GetTile(x, y).currentPiece.side == side) break;
+        }
+        for (int x = tile.x - 1, y = tile.y - 1; x >= 0 && y >= 0; x--, y--)
+        {
+            Preview.Add(Ref.ManageTiles.GetTile(x, y));
+            if (Ref.ManageTiles.GetTile(x, y).currentPiece != null) break;
+            if (Ref.ManageTiles.GetTile(x, y).currentPiece != null && Ref.ManageTiles.GetTile(x, y).currentPiece.side == side) break;
+        }
+        return Preview;
+    }
 }

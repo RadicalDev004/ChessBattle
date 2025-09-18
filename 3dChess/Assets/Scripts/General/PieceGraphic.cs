@@ -9,10 +9,11 @@ public class PieceGraphic : MonoBehaviour, IDragHandler,IEndDragHandler
 {
     public TMP_Text T_Name;
     public bool isHeld;
-    private RectTransform rectTransform;
+    [HideInInspector]
+    public RectTransform rectTransform;
 
     private EntityData thisEntity;
-    public int position;
+    public int position = -1;
     [HideInInspector]
     public LayoutEdit LayoutEdit;
 
@@ -36,11 +37,22 @@ public class PieceGraphic : MonoBehaviour, IDragHandler,IEndDragHandler
     public void OnEndDrag(PointerEventData eventData)
     {
         int pos = LayoutEdit.GetTileIndexFronPosition(rectTransform.localPosition);
+        if (pos == -2 ||(pos == -1 && position == -1))
+        {
+            thisEntity.Position = -1;           
+            LayoutEdit.RemovePieceGraphic(this);
+            LayoutEdit.UpdateLimit();
+            LayoutEdit.UpdateAllListPieces();
+            return;
+        }
         if (pos != -1)
         {
-            LayoutEdit.player.ChangePiecePosition(position, pos);
+            thisEntity.Position = pos;
             position = pos;
         }
+
         Tween.AnchoredPosition(rectTransform, LayoutEdit.Squares[position].GetComponent<RectTransform>().localPosition, 0.1f, 0, Tween.EaseInOut);
+        LayoutEdit.UpdateAllListPieces();
+        LayoutEdit.UpdateLimit();
     }
 }

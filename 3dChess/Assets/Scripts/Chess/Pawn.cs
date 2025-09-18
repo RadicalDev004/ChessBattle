@@ -54,4 +54,34 @@ public class Pawn : Piece
 
         return Preview;
     }
+
+    public override List<Tile> GetCurrentHelpingTiles(Tile tile)
+    {
+        Preview.Clear();
+        foreach (var newPos in pos)
+        {
+            int x = tile.x + newPos.Item1;
+            int y = tile.y + newPos.Item2;
+
+            if (newPos.Item1 == 2 && movesCnt >= 1) continue;
+            if (x < 0 || y < 0 || x > 7 || y > 7) continue;
+
+            if (Ref.ManageTiles.GetTile(x, y).currentPiece == null)
+                Preview.Add(Ref.ManageTiles.GetTile(x, y));
+            else
+                break;
+        }
+
+        List<(int, int)> attack = new() { (1, -1), (1, 1) };
+        foreach (var attackPos in attack)
+        {
+            int x = tile.x + attackPos.Item1;
+            int y = tile.y + attackPos.Item2;
+
+            if (x < 0 || y < 0 || x > 7 || y > 7) continue;
+            Preview.Add(Ref.ManageTiles.GetTile(x, y));
+        }
+
+        return Preview;
+    }
 }
