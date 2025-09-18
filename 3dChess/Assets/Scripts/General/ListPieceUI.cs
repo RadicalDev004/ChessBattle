@@ -19,6 +19,9 @@ public class ListPieceUI : MonoBehaviour, IDragHandler, IEndDragHandler
     private void Awake()
     {
         Outline = GetComponent<UnityEngine.UI.Outline>();
+        GetComponent<Button>().onClick.AddListener(() => {  
+            FindObjectOfType<ViewPiece>().OpenViewPiece(thisEntity);
+        });
     }
 
     public void Create(EntityData data)
