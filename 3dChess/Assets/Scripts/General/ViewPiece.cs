@@ -17,6 +17,8 @@ public class ViewPiece : MonoBehaviour
     public TMP_Text T_Name;
     public TMP_Text T_Level, T_Type;
     public Slider S_Health;
+    public Slider S_Exp;
+    public Slider S_Attack, S_Defence, S_Speed, S_Luck;
 
     public MoveUI OriginalMoveUI;   
     public GameObject MovesParent;
@@ -75,6 +77,24 @@ public class ViewPiece : MonoBehaviour
             newMoveUI.gameObject.SetActive(true);
             newMoveUI.Create(m);           
         }
+
+        S_Health.maxValue = e.MaxHealth;
+        S_Health.value = e.Health;
+
+        var expBounds = e.GetExpTresholdBounds();
+        S_Exp.minValue = expBounds.Item1;
+        S_Exp.maxValue = expBounds.Item2;
+        S_Exp.value = e.Exp;
+
+        S_Attack.maxValue = 10;
+        S_Defence.maxValue = 1000;
+        S_Speed.maxValue = 10;
+        S_Luck.maxValue = 10;
+
+        S_Attack.value = e.Attack;
+        S_Defence.value = e.MaxHealth;
+        S_Speed.value = e.Speed;
+        S_Luck.value = e.Luck;
     }
 
     public void CloseViewPiece()

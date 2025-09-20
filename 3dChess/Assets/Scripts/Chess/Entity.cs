@@ -6,13 +6,13 @@ using UnityEngine;
 public abstract class Entity : MonoBehaviour
 {
     public EntityData Data;
-    public string Name;
-    public int Health; 
-    public int MaxHealth;// max 1000
+    public string Name { get { return Data.Name; } }
+    public int Health;
+    public int MaxHealth { get { return Data.MaxHealth; } }// max 1000
 
-    public int Attack; // max 10
-    public int Speed; // max 10
-    public int Luck; // max 10
+    public int Attack { get { return Data.Attack; } } // max 10
+    public int Speed { get { return Data.Speed; } } // max 10
+    public int Luck { get { return Data.Luck; } } // max 10
 
     public int Level = 1;
     public float Exp;
@@ -69,6 +69,6 @@ public abstract class Entity : MonoBehaviour
         Data.Exp += amount;
     }
 
-    public List<Move> Moves;
+    public List<Move> Moves { get { return Data.Moves; } }
     public abstract void UpdateUI();
 }

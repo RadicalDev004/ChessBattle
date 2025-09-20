@@ -33,7 +33,6 @@ public class ChessManager : MonoBehaviour
 
             var p = Instantiate(OrgPieces[(int)piece.PieceType]);
             p.gameObject.SetActive(true);
-            p.Data = piece;
             p.Create(piece.Position, piece);
             
             WhitePieces.Add(p);
@@ -46,7 +45,6 @@ public class ChessManager : MonoBehaviour
             var p = Instantiate(OrgPieces[(int)piece.PieceType]);
             p.gameObject.SetActive(true);
             p.side = false;
-            p.Data = piece;
             p.Create(64 - piece.Position, piece); 
             
             BlackPieces.Add(p);

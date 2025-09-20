@@ -509,7 +509,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &97911786
 RectTransform:
   m_ObjectHideFlags: 0
@@ -643,7 +643,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &111302008
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2724,6 +2724,7 @@ MonoBehaviour:
     Attack: 0
     Speed: 0
     Luck: 0
+    Variant: 
     Exp: 0
     Moves: []
   position: 0
@@ -3618,12 +3619,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Name: Trainer Test
-  PiecesJson: "{\r\n  \"Inventory\": [\r\n    {\r\n      \"Name\": \"TestKing\",\r\n     
-    \"PieceType\": 5,\r\n      \"Position\": 1,\r\n      \"Health\": 100,\r\n     
-    \"MaxHealth\": 100,\r\n      \"Level\": 1,\r\n      \"Moves\": [\r\n        {\r\n         
-    \"Name\": \"Strike\",\r\n          \"Description\": \"Speed towards the other
-    piece at full speed dealing damage.\",\r\n          \"Type\": 0,\r\n         
-    \"Action\": 100.0\r\n        }\r\n      ]\r\n    }\n  ]\n}"
+  PiecesJson: "{\r\n  \"Inventory\": [\r\n    {\r\n      \"Name\": \"MyKing\",\r\n     
+    \"PieceType\": 5,\r\n      \"Position\": 1,\r\n      \"Health\": 250,\r\n     
+    \"MaxHealth\": 250,\r\n      \"Attack\": 5,\r\n      \"Speed\": 3,\r\n      \"Luck\":
+    6,\r\n      \"Variant\": \"basic\",\r\n      \"Exp\": 10.0,\r\n      \"Moves\":
+    [\r\n        {\r\n          \"Name\": \"Strike\",\r\n          \"Description\":
+    \"Speed towards the other piece at full speed dealing damage.\",\r\n         
+    \"Type\": 0,\r\n          \"Action\": 100.0\r\n        }\r\n      ],\r\n     
+    \"Level\": 2\r\n    }\r\n  ]\r\n}"
   Defeated: 0
 --- !u!1 &603905708
 GameObject:
@@ -5347,7 +5350,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &799963489
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6915,7 +6918,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -357, y: -796.85}
+  m_AnchoredPosition: {x: -357, y: -857.49}
   m_SizeDelta: {x: 83.0432, y: 53.2603}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &963361062
@@ -7903,6 +7906,11 @@ MonoBehaviour:
   T_Level: {fileID: 963361062}
   T_Type: {fileID: 1027024197}
   S_Health: {fileID: 508653522}
+  S_Exp: {fileID: 427603966}
+  S_Attack: {fileID: 1903656443}
+  S_Defence: {fileID: 56911255}
+  S_Speed: {fileID: 883174857}
+  S_Luck: {fileID: 905041365}
   OriginalMoveUI: {fileID: 1636741232}
   MovesParent: {fileID: 542596197}
   CurrentMoves: []
@@ -8218,7 +8226,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -357, y: -857.85}
+  m_AnchoredPosition: {x: -357, y: -796.85}
   m_SizeDelta: {x: 83.0432, y: 53.2603}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1277297091
@@ -8241,7 +8249,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: exp
+  m_text: hp
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: aae934b55e5734a4882f00f15997eb3b, type: 2}
   m_sharedMaterial: {fileID: 2164040, guid: aae934b55e5734a4882f00f15997eb3b, type: 2}
@@ -12624,7 +12632,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1853936740
 RectTransform:
   m_ObjectHideFlags: 0

@@ -44,13 +44,16 @@ public abstract class Piece : Entity
         tile.currentPiece = this;
         currentTile = tile;
         orgTile = currentTile;
-        transform.position = new Vector3(tile.transform.position.x, normalY, tile.transform.position.z);      
+        transform.position = new Vector3(tile.transform.position.x, normalY, tile.transform.position.z);
 
+        Data = e;
+        /*
         Name = e.Name;
         MaxHealth = e.MaxHealth;
+        */
         Health = e.Health;
         Level = e.Level;
-        Moves = e.Moves;
+        //Moves = e.Moves;
 
         ActivatePieceUI();
         //MakeMoves();
@@ -198,8 +201,7 @@ public abstract class Piece : Entity
         pieceUI.transform.localPosition = new Vector3(0, 0, pieceUIHeight);
         pieceUI.gameObject.SetActive(true);
         //pieceUI.GetComponent<RectTransform>().localPosition = new Vector3(0, 0, 0.05f);
-        Name = Name == "" ? GetType().Name : Name;
-        pieceUI.Create(Name, Health, MaxHealth, side);
+        pieceUI.Create(Name == "" ? GetType().Name : Name, Health, MaxHealth, side);
     }
 
     public void MakeMoves()

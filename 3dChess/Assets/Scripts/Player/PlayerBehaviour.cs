@@ -55,9 +55,9 @@ public class PlayerBehaviour : MonoBehaviour
     public void GiveLoadout()
     {
         PiecesInventory.Clear();
-        EntityData p1 = new("MyKing", EntityData.Type.King, 1, 100, 100, 1, MovePool.GetRandomMove());
-        EntityData p2 = new("MyPawn", EntityData.Type.Pawn, 2, 150, 150, 1, MovePool.GetRandomMove());
-        EntityData p3 = new("MyRook", EntityData.Type.Rook, 3, 500, 500, 1, MovePool.GetRandomMove());
+        EntityData p1 = new("MyKing", EntityData.Type.King, 1, 250, 250, 5, 3, 6, 10, "basic", MovePool.GetRandomMove());
+        EntityData p2 = new("MyPawn", EntityData.Type.Pawn, 2, 200, 200, 3, 7, 7, 5, "basic", MovePool.GetRandomMove());
+        EntityData p3 = new("MyRook", EntityData.Type.Rook, 3, 500, 500, 4, 2, 3, 40, "basic", MovePool.GetRandomMove());
 
         PiecesInventory.Add(p1);
         PiecesInventory.Add(p2);
