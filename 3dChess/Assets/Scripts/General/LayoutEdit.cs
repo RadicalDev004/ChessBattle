@@ -28,6 +28,7 @@ public class LayoutEdit : MonoBehaviour
 
     private void Start()
     {
+        player.LayoutEdit = this;
         GenerateSquares();       
         Invoke(nameof(PlacePieces), 0.5f);
     }
@@ -68,6 +69,23 @@ public class LayoutEdit : MonoBehaviour
             PieceGraphics.Add(newPieceGraphic);
         }
         UpdateLimit();
+    }
+
+    public void RefersListhPiecesUI()
+    {
+        foreach(var p in ListPiecesUI)
+        {
+            Destroy(p.gameObject);
+        }
+        ListPiecesUI.Clear();
+
+        foreach (var p in player.PiecesInventory)
+        {
+            var newListPiece = Instantiate(OrgListPiece, ListPieceParent.transform);
+            newListPiece.gameObject.SetActive(true);
+            newListPiece.Create(p);
+            ListPiecesUI.Add(newListPiece);
+        }
     }
 
     public void UpdateLimit()

@@ -11,13 +11,14 @@ public class EntityData
     public Type PieceType;
     public int Position;
     public int Health;
-    public int MaxHealth;
+    public int MaxHealth;// max 1000
     
     public int Attack; // max 10
     public int Speed; // max 10
     public int Luck; // max 10
 
     public string Variant;
+    public int HiddenStat; // max 10
 
     public int Level {
         get
@@ -75,7 +76,8 @@ public class EntityData
         this.Luck = Luck;
         this.Exp = Exp;
         this.Variant = Variant;
-        this.Moves.AddRange(Moves);
+        if(Moves != null)
+            this.Moves.AddRange(Moves);
     }
 
     public int GetLevel()

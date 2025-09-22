@@ -10,6 +10,9 @@ public class PlayerBehaviour : MonoBehaviour
     [HideInInspector]
     public Trainer TrainerInRange;
     public UI UI;
+    [HideInInspector]
+    public LayoutEdit LayoutEdit;
+
     private void Awake()
     {
         LoadPieces();
@@ -88,6 +91,20 @@ public class PlayerBehaviour : MonoBehaviour
         if(other.TryGetComponent(out Trainer t))
         {
             TrainerInRange = t;
+        }
+        if(other.CompareTag("test"))
+        {
+            var piece = Variants.GetRandom();
+            PiecesInventory.Add(piece);
+            SavePieces();
+            LayoutEdit.RefersListhPiecesUI();
+        }
+        if (other.CompareTag("test2"))
+        {
+            var piece = Variants.GetRandomOfType(EntityData.Type.King);
+            PiecesInventory.Add(piece);
+            SavePieces();
+            LayoutEdit.RefersListhPiecesUI();
         }
     }
 
