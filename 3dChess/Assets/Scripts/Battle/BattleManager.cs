@@ -3,12 +3,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class BattleManager : MonoBehaviour
 {
     public BattleUI BattleUI;
+    public Camera BattleCam;
     public Dictionary<Entity, GameObject> player1Others = new(), player2Others = new();
     public Entity player1, player2;
     public GameObject P1, P2;
@@ -18,6 +20,8 @@ public class BattleManager : MonoBehaviour
     public BattleResult Result = BattleResult.Lost;
 
     public Action<BattleResult, Tile> OnBattleEnd;
+
+    public TMP_Text T_Animtation;
 
     public enum BattleResult
     {
@@ -117,8 +121,8 @@ public class BattleManager : MonoBehaviour
 
     private IEnumerator StraightAttack(Entity attacker, Entity defender, GameObject attackerObj, GameObject defenderObj, Move m)
     {
-        Vector3 initialPos = attackerObj.gameObject.transform.position;
-        Tween.Position(attackerObj.gameObject.transform, defenderObj.gameObject.transform.position, 0.5f, 0, Tween.EaseIn);
+        Vector3 initialPos = attackerObj.transform.position;
+        Tween.Position(attackerObj.transform, defenderObj.transform.position, 0.5f, 0, Tween.EaseIn);
 
         if(m.Type == MoveType.Attack)
         {
@@ -126,6 +130,8 @@ public class BattleManager : MonoBehaviour
             attacker.GiveExp(m.Action / 10);
             if (defender.Health <= 0)
                 attacker.GiveExp(30);
+
+            StartCoroutine(ActionAfterTIme(0.5f, () => { TextAnimation(T_Animtation, ((Piece)player1).side, "-" + m.Action, Color.red, new(0, 0.2f, -0.15f)); }));
         }
         else if(m.Type == MoveType.Heal)
         {
@@ -134,7 +140,7 @@ public class BattleManager : MonoBehaviour
 
         yield return new WaitForSeconds(0.5f);
         BattleUI.UpdateHealth();
-        Tween.Position(attackerObj.gameObject.transform, initialPos, 0.5f, 0, Tween.EaseOut);
+        Tween.Position(attackerObj.transform, initialPos, 0.5f, 0, Tween.EaseOut);
         if(player1.Health <= 0 || player2.Health <= 0)
         {
             Result = player2.Health <= 0 ? BattleResult.Won : BattleResult.Lost;
@@ -147,6 +153,24 @@ public class BattleManager : MonoBehaviour
             
             EndBattle();
         }
+    }
+
+    private IEnumerator ActionAfterTIme(float time, Action A)
+    {
+        yield return new WaitForSecondsRealtime(time);
+        A?.Invoke();
+    }
+
+    private void TextAnimation(TMP_Text T_Text, bool side, string info, Color c, Vector3 add)
+    {
+        var text = Instantiate(T_Text, T_Text.gameObject.transform.parent);
+        text.transform.localPosition = (side ? P1.transform.localPosition : P2.transform.localPosition) + add;
+        Vector3 direction = text.transform.position - BattleCam.transform.position;
+        text.transform.rotation = Quaternion.LookRotation(direction);
+        text.text = info;
+        text.color = c;
+        text.gameObject.SetActive(true);
+        Tween.LocalPosition(text.transform, text.transform.localPosition + new Vector3(0, 0.2f, 0), 1f, 0, Tween.EaseOut, completeCallback: () => { Destroy(text.gameObject); });
     }
 
     public GameObject CreateNewShowPiece(GameObject p, Transform pos)

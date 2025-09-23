@@ -200,7 +200,7 @@ public abstract class Piece : Entity
         pieceUI.transform.localPosition = new Vector3(0, 0, pieceUIHeight);
         pieceUI.gameObject.SetActive(true);
         //pieceUI.GetComponent<RectTransform>().localPosition = new Vector3(0, 0, 0.05f);
-        pieceUI.Create(Name == "" ? GetType().Name : Name, Health, MaxHealth, side);
+        pieceUI.Create(Name == "" ? GetType().Name : Name, Level.ToString(), Health, MaxHealth, side);
     }
 
     public void MakeMoves()
