@@ -110,4 +110,9 @@ public class Movement : MonoBehaviour
 
         return velo;
     }
+
+    public void ToggleMovement(bool toggle)
+    {
+        IsPaused = toggle;
+    }
 }

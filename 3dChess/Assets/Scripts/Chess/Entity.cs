@@ -7,7 +7,7 @@ public abstract class Entity : MonoBehaviour
 {
     public EntityData Data;
     public string Name { get { return Data.Name; } }
-    public int Health;
+    public int Health { get { return Data.Health; } set { Data.Health = value; } }
     public int MaxHealth { get { return Data.MaxHealth; } }// max 1000
 
     public int Attack { get { return Data.Attack; } } // max 10
@@ -71,4 +71,6 @@ public abstract class Entity : MonoBehaviour
 
     public List<Move> Moves { get { return Data.Moves; } }
     public abstract void UpdateUI();
+
+    public abstract void OnIncludedBattleEnd();
 }

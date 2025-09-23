@@ -1,3 +1,4 @@
+using Pixelplacement;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -56,8 +57,9 @@ public class BattleUI : MonoBehaviour
 
     public void UpdateHealth()
     {
-        S_P1.value = BattleManager.player1.Health;
-        S_P2.value = BattleManager.player2.Health;
+        print("Animating health bar");
+        Tween.Value(S_P1.value, BattleManager.player1.Health, (val) => { S_P1.value = val; }, 0.5f, 0, Tween.EaseInOut, completeCallback: () => { S_P1.value = BattleManager.player1.Health; } );
+        Tween.Value(S_P2.value, BattleManager.player2.Health, (val) => { S_P2.value = val; }, 0.5f, 0, Tween.EaseInOut, completeCallback: () => { S_P2.value = BattleManager.player2.Health; } );
     }
 
     public void UpdateUI()

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ChessManager : MonoBehaviour
 {    
@@ -60,5 +61,6 @@ public class ChessManager : MonoBehaviour
 
         string json = JsonConvert.SerializeObject(whiteData, Formatting.Indented);
         PlayerPrefs.SetString("pieces", json);
+        SceneManager.LoadScene("Game");
     }
 }

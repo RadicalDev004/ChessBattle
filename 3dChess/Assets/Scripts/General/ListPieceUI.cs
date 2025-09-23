@@ -16,13 +16,6 @@ public class ListPieceUI : MonoBehaviour, IDragHandler, IEndDragHandler
 
     private UnityEngine.UI.Outline Outline;
 
-    private void Awake()
-    {
-        Outline = GetComponent<UnityEngine.UI.Outline>();
-        GetComponent<Button>().onClick.AddListener(() => {  
-            FindObjectOfType<ViewPiece>().OpenViewPiece(thisEntity);
-        });
-    }
 
     public void Create(EntityData data)
     {
@@ -32,6 +25,14 @@ public class ListPieceUI : MonoBehaviour, IDragHandler, IEndDragHandler
         T_Level.text = "lvl " + thisEntity.Level;
         S_Health.maxValue = thisEntity.MaxHealth;
         S_Health.value = thisEntity.Health;
+
+        GetComponent<Button>().onClick.RemoveAllListeners();
+        GetComponent<Button>().onClick.AddListener(() => {
+            FindObjectOfType<ViewPiece>().OpenViewPiece(thisEntity);
+        });
+
+        Outline = GetComponent<UnityEngine.UI.Outline>();
+
         UpdateOutline();
     }
 

@@ -20,11 +20,11 @@ public class PlayerBehaviour : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.T))
+        if (Input.GetKeyDown(KeyCode.T) && !Movement.IsPaused)
         {
             SavePieces();
         }
-        if(Input.GetKeyDown(KeyCode.G))
+        if(Input.GetKeyDown(KeyCode.G) && !Movement.IsPaused)
         {
             GiveLoadout();
         }
@@ -32,7 +32,7 @@ public class PlayerBehaviour : MonoBehaviour
         if (TrainerInRange != null)
         {
             UI.ShowBattleTrainerButton(TrainerInRange.Name);
-            if(Input.GetKeyDown(KeyCode.Space))
+            if(Input.GetKeyDown(KeyCode.Space) &&!Movement.IsPaused)
             {
                 PlayerPrefs.SetString("trainer", TrainerInRange.PiecesJson);
                 SceneManager.LoadScene("Chess");
@@ -88,6 +88,7 @@ public class PlayerBehaviour : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+
         if(other.TryGetComponent(out Trainer t))
         {
             TrainerInRange = t;

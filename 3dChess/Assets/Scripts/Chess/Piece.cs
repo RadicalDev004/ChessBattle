@@ -177,16 +177,15 @@ public abstract class Piece : Entity
         }       
     }
 
-    public void BattleEndListener(bool winner, Tile tile)
+    public void BattleEndListener(BattleManager.BattleResult result, Tile tile)
     {
-        Debug.Log("Winner from piece: " + winner);
-        if(!winner)
+        Debug.Log("Winner from piece: " + result + " " + side);
+        if(!(result == BattleManager.BattleResult.Won) && side || (result == BattleManager.BattleResult.Won) && !side || (result == BattleManager.BattleResult.Fleed))
         {
             Tween.LocalPosition(transform, new Vector3(orgTile.transform.position.x, normalY, orgTile.transform.position.z), 0.25f, 0, Tween.EaseOut);
         }
-        else
+        else if((result == BattleManager.BattleResult.Won) && !side || !(result == BattleManager.BattleResult.Won) && side)
         {
-            Destroy(tile.currentPiece.gameObject);
             movesCnt++;
             tile.currentPiece = this;
             orgTile.currentPiece = null;
@@ -207,5 +206,13 @@ public abstract class Piece : Entity
     public void MakeMoves()
     {
         //Moves = MovePool.Basic;
+    }
+
+    public override void OnIncludedBattleEnd()
+    {
+        if(Health <= 0)
+        {
+            gameObject.SetActive(false);
+        }
     }
 }

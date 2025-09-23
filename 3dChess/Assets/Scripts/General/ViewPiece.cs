@@ -32,6 +32,10 @@ public class ViewPiece : MonoBehaviour
     [Header("Rotation")]
     public int Direction;
 
+    [Header("Change Name")]
+    public GameObject Tab_ChangeName;
+    public TMP_InputField In_Name;
+
     private void FixedUpdate()
     {
         if (!State) return;
@@ -46,6 +50,7 @@ public class ViewPiece : MonoBehaviour
 
     public void OpenViewPiece(EntityData e)
     {
+        Movement.IsPaused = true;
         thisEntity = e;
         Basic.gameObject.SetActive(false);
         Tab_Basic.gameObject.SetActive(false);
@@ -99,12 +104,28 @@ public class ViewPiece : MonoBehaviour
 
     public void CloseViewPiece()
     {
+        Movement.IsPaused = false;
         Basic.gameObject.SetActive(true);
         Tab_Basic.gameObject.SetActive(true);
 
         Piece.gameObject.SetActive(false);
         Tab_Piece.gameObject.SetActive(false);
         State = false;
+    }
+
+    public void OpenChangeName()
+    {
+        In_Name.text = thisEntity.Name;
+        Tab_ChangeName.SetActive(true);
+    }
+
+    public void CloseChangeName()
+    {
+        thisEntity.Name = In_Name.text;
+        Tab_ChangeName.SetActive(false);
+        T_Name.text = thisEntity.Name;
+        FindObjectOfType<LayoutEdit>().RefersListhPiecesUI();
+        FindAnyObjectByType<PlayerBehaviour>().SavePieces();
     }
 }
 

@@ -15,9 +15,16 @@ public class BattleManager : MonoBehaviour
     public Transform Pos1, Pos2, Pos1Behind, Pos2Behind;
     public Tile contestedTile;
     public int Turn;
-    public bool Winner;
+    public BattleResult Result = BattleResult.Lost;
 
-    public Action<bool, Tile> OnBattleEnd;
+    public Action<BattleResult, Tile> OnBattleEnd;
+
+    public enum BattleResult
+    {
+        Won,
+        Lost,
+        Fleed,
+    }
 
     public void StartBattle(Entity e1, Entity e2, Tile t, bool start)
     {
@@ -56,6 +63,12 @@ public class BattleManager : MonoBehaviour
         
     }
 
+    public void FleeBattle()
+    {
+        Result = BattleResult.Fleed;
+        EndBattle();
+    }
+
     public void EndBattle()
     {
        
@@ -67,11 +80,23 @@ public class BattleManager : MonoBehaviour
         player1.UpdateUI();
         player2.UpdateUI();
 
+        player1.OnIncludedBattleEnd();
+        player2.OnIncludedBattleEnd();
+
+        foreach(var p in player1Others)
+        {
+            p.Key.OnIncludedBattleEnd();
+        }
+        foreach(var p in player2Others)
+        {
+            p.Key.OnIncludedBattleEnd();
+        }
+
         Destroy(P1);
         Destroy(P2);
 
-        Debug.Log(Winner);
-        OnBattleEnd?.Invoke(Winner, contestedTile);
+        Debug.Log(Result);
+        OnBattleEnd?.Invoke(Result, contestedTile);
     }
 
 
@@ -105,19 +130,19 @@ public class BattleManager : MonoBehaviour
         else if(m.Type == MoveType.Heal)
         {
             attacker.Health += (int)m.Action;
-        }
-            BattleUI.UpdateHealth();
+        }           
 
         yield return new WaitForSeconds(0.5f);
+        BattleUI.UpdateHealth();
         Tween.Position(attackerObj.gameObject.transform, initialPos, 0.5f, 0, Tween.EaseOut);
         if(player1.Health <= 0 || player2.Health <= 0)
         {
-            Winner = player2.Health <= 0;
-            foreach (var pair in (Winner ? player1Others : player2Others))
+            Result = player2.Health <= 0 ? BattleResult.Won : BattleResult.Lost;
+            foreach (var pair in (Result == BattleResult.Won ? player1Others : player2Others))
             {
                 pair.Key.GiveExp(15);
             }
-            var winnerPiece = Winner ? player1 : player2;
+            var winnerPiece = Result == BattleResult.Won ? player1 : player2;
             winnerPiece.GiveExp(15);
             
             EndBattle();

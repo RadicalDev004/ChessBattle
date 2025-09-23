@@ -79,12 +79,17 @@ public class LayoutEdit : MonoBehaviour
         }
         ListPiecesUI.Clear();
 
+
         foreach (var p in player.PiecesInventory)
         {
             var newListPiece = Instantiate(OrgListPiece, ListPieceParent.transform);
             newListPiece.gameObject.SetActive(true);
             newListPiece.Create(p);
             ListPiecesUI.Add(newListPiece);
+        }
+        foreach(var p in PieceGraphics)
+        {
+            p.Create(p.thisEntity, p.position);
         }
     }
 
