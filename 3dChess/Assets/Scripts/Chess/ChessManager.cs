@@ -10,6 +10,7 @@ public class ChessManager : MonoBehaviour
     public List<Piece> OrgPieces = new();
     public static int Turn = 0;
     public List<Piece> WhitePieces = new(), BlackPieces = new();
+    public ChessUI ChessUI;
 
     private void Start()
     {
@@ -62,5 +63,17 @@ public class ChessManager : MonoBehaviour
         string json = JsonConvert.SerializeObject(whiteData, Formatting.Indented);
         PlayerPrefs.SetString("pieces", json);
         SceneManager.LoadScene("Game");
+    }
+
+    public void EndMatch(bool state)
+    {
+        if(state)
+        {
+            ChessUI.WinUI();
+        }
+        else
+        {
+            ChessUI.LoseUI();
+        }
     }
 }

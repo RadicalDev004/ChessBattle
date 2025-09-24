@@ -9,15 +9,21 @@ using UnityEngine;
 
 public class BattleManager : MonoBehaviour
 {
+    public ChessManager ChessManager;
     public BattleUI BattleUI;
     public Camera BattleCam;
-    public Dictionary<Entity, GameObject> player1Others = new(), player2Others = new();
-    public Entity player1, player2;
-    public GameObject P1, P2;
+    public Entity Original1, Original2;
+    public Entity player1 { get { return player1Team.Single(p => p.Value.Item2).Key; } }
+    public Entity player2 { get { return player2Team.Single(p => p.Value.Item2).Key; } }
+
+    public GameObject P1 { get { return player1Team.Single(p => p.Value.Item2).Value.Item1; } }
+    public GameObject P2 { get { return player2Team.Single(p => p.Value.Item2).Value.Item1; } }
+
+    public Dictionary<Entity, (GameObject, bool)> player1Team = new(), player2Team = new();
     public Transform Pos1, Pos2, Pos1Behind, Pos2Behind;
     public Tile contestedTile;
     public int Turn;
-    public BattleResult Result = BattleResult.Lost;
+    public BattleResult Result = BattleResult.Empty;
 
     public Action<BattleResult, Tile> OnBattleEnd;
 
@@ -25,38 +31,44 @@ public class BattleManager : MonoBehaviour
 
     public enum BattleResult
     {
-        Won,
-        Lost,
-        Fleed,
+        Empty = -1,
+        WonSide0 = 0, // black
+        WonSide1 = 1, // white
+        Fleed = 2,
     }
 
     public void StartBattle(Entity e1, Entity e2, Tile t, bool start)
     {
         Ref.AI.Create();     
         OnBattleEnd = null;
-        player1 = ((Piece)e1).side ? e1 : e2;
-        player2 = ((Piece)e1).side ? e2 : e1;
+        Original1 = e1;
+        Original2 = e2;
+        var player1 = ((Piece)e1).side ? e1 : e2;
+        var player2 = ((Piece)e1).side ? e2 : e1;
         contestedTile = t;
         Turn = start ? 0 : 1;
 
-        var player1others = FindObjectsOfType<Piece>().Where(e => e.side == ((Piece)player1).side && e.GetCurrentHelpingTiles(e.currentTile).Contains(t) && e.gameObject.activeInHierarchy && e != player1).Cast<Entity>().ToList();
-        var player2others = FindObjectsOfType<Piece>().Where(e => e.side == ((Piece)player2).side && e.GetCurrentHelpingTiles(e.currentTile).Contains(t) && e.gameObject.activeInHierarchy && e != player2).Cast<Entity>().ToList();
+        var player1team = FindObjectsOfType<Piece>().Where(e => e.side == ((Piece)player1).side && e.GetCurrentHelpingTiles(e.currentTile).Contains(t) && e.gameObject.activeInHierarchy && e != player1).Cast<Entity>().ToList();
+        var player2team = FindObjectsOfType<Piece>().Where(e => e.side == ((Piece)player2).side && e.GetCurrentHelpingTiles(e.currentTile).Contains(t) && e.gameObject.activeInHierarchy && e != player2).Cast<Entity>().ToList();
 
-        player1Others.Clear();
-        player2Others.Clear();
+        player1Team.Clear();
+        player2Team.Clear();
 
-        P1 = CreateNewShowPiece(player1.gameObject, Pos1);
-        P2 = CreateNewShowPiece(player2.gameObject, Pos2);
+        var P1 = CreateNewShowPiece(player1.gameObject, Pos1);
+        var P2 = CreateNewShowPiece(player2.gameObject, Pos2);
 
-        foreach (var otherPiece in player1others)
+        player1Team.Add(player1, (P1, true));
+        player2Team.Add(player2, (P2, true));
+
+        foreach (var otherPiece in player1team)
         {
             var newPiece = CreateNewShowPiece(otherPiece.gameObject, Pos1Behind);
-            player1Others.Add(otherPiece, newPiece);
+            player1Team.Add(otherPiece, (newPiece, false));
         }
-        foreach (var otherPiece in player2others)
+        foreach (var otherPiece in player2team)
         {
             var newPiece = CreateNewShowPiece(otherPiece.gameObject, Pos2Behind);
-            player2Others.Add(otherPiece, newPiece);
+            player2Team.Add(otherPiece, (newPiece, false));
         }
 
         Ref.Camera.gameObject.SetActive(false);
@@ -80,58 +92,74 @@ public class BattleManager : MonoBehaviour
 
         Ref.Camera.gameObject.SetActive(true);
         Ref.BattleCamera.gameObject.SetActive(false);
-        Ref.AI.Stop();
-        player1.UpdateUI();
-        player2.UpdateUI();
+        Ref.AI.Stop();       
 
-        player1.OnIncludedBattleEnd();
-        player2.OnIncludedBattleEnd();
-
-        foreach(var p in player1Others)
+        foreach(var p in player1Team.Concat(player2Team))
         {
+            p.Key.UpdateUI();
             p.Key.OnIncludedBattleEnd();
-        }
-        foreach(var p in player2Others)
-        {
             p.Key.OnIncludedBattleEnd();
+            Destroy(p.Value.Item1);
         }
-
-        Destroy(P1);
-        Destroy(P2);
+        player1Team.Clear();
+        player2Team.Clear();
 
         Debug.Log(Result);
         OnBattleEnd?.Invoke(Result, contestedTile);
     }
 
 
-    public void ProcessMove(Move m)
+    public void ProcessMove(Move m, bool attackingSide)
     {
-        GameObject attackerObj = Turn % 2 == 0 ? P1! : P2;
-        GameObject defenderObj = Turn % 2 != 0 ? P1 : P2;
+        var list0 = Turn % 2 == 0 ? player1Team : player2Team;
+        var list1 = Turn % 2 != 0 ? player1Team : player2Team;
 
-        Entity attacker = Turn % 2 == 0 ? player1 : player2;
-        Entity defender = Turn % 2 != 0 ? player1 : player2;
+        var attacker = list0.Single(p => p.Value.Item2);
+        var defender = list1.Single(p => p.Value.Item2);
+
         Turn++;
         BattleUI.UpdateUI();
 
         //Move Animation
 
-        StartCoroutine(StraightAttack(attacker, defender, attackerObj, defenderObj, m));
+        StartCoroutine(StraightAttack((attacker.Key, attacker.Value.Item1), (defender.Key, defender.Value.Item1), m, attackingSide));
     }
 
-    private IEnumerator StraightAttack(Entity attacker, Entity defender, GameObject attackerObj, GameObject defenderObj, Move m)
+    private IEnumerator StraightAttack((Entity, GameObject) att, (Entity, GameObject) deff, Move m, bool attackingSide)
     {
+        var attacker = att.Item1;
+        var defender = deff.Item1;
+        var attackerObj = att.Item2;
+        var defenderObj = deff.Item2;
+
         Vector3 initialPos = attackerObj.transform.position;
         Tween.Position(attackerObj.transform, defenderObj.transform.position, 0.5f, 0, Tween.EaseIn);
 
         if(m.Type == MoveType.Attack)
-        {
-            defender.Health -= (int)m.Action;
+        {           
+            int damage = (int)m.Action;
+            string damageInfo = "-" + damage;
+
+            if (RandomChance.Percent(attacker.Luck * 5))
+            {
+                damage *= 2;
+                damageInfo = "-" + damage + " CRIT";
+            }
+            if (RandomChance.Percent(defender.Speed * 5))
+            {
+                damage = 0;
+                damageInfo = "EVADE";
+            }
+
+            defender.Health -= damage;
             attacker.GiveExp(m.Action / 10);
             if (defender.Health <= 0)
                 attacker.GiveExp(30);
 
-            StartCoroutine(ActionAfterTIme(0.5f, () => { TextAnimation(T_Animtation, ((Piece)player1).side, "-" + m.Action, Color.red, new(0, 0.2f, -0.15f)); }));
+            if (defender.Health < 0)
+                defender.Health = 0;
+
+            StartCoroutine(ActionAfterTIme(0.5f, () => { TextAnimation(T_Animtation, attackingSide, damageInfo, Color.red, new(0, 0.2f, -0.15f)); }));
         }
         else if(m.Type == MoveType.Heal)
         {
@@ -141,17 +169,27 @@ public class BattleManager : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         BattleUI.UpdateHealth();
         Tween.Position(attackerObj.transform, initialPos, 0.5f, 0, Tween.EaseOut);
-        if(player1.Health <= 0 || player2.Health <= 0)
+        yield return new WaitForSeconds(0.5f);
+
+        if (Original1.Health <= 0 || Original2.Health <= 0)
         {
-            Result = player2.Health <= 0 ? BattleResult.Won : BattleResult.Lost;
-            foreach (var pair in (Result == BattleResult.Won ? player1Others : player2Others))
+            var defeatedPiece = Original1.Health <= 0 ? Original1 : Original2;
+            bool sideOfDefeatedPiece = ((Piece)defeatedPiece).side;
+            print("Side of defeated piece " + sideOfDefeatedPiece);
+            var winningTeam = sideOfDefeatedPiece ? player2Team : player1Team;
+            Result = sideOfDefeatedPiece ? BattleResult.WonSide0 : BattleResult.WonSide1;
+
+            foreach (var pair in winningTeam)
             {
                 pair.Key.GiveExp(15);
             }
-            var winnerPiece = Result == BattleResult.Won ? player1 : player2;
-            winnerPiece.GiveExp(15);
             
             EndBattle();
+            
+            if(defeatedPiece.GetType() == typeof(King))
+            {
+                ChessManager.EndMatch(!sideOfDefeatedPiece);
+            }
         }
     }
 
@@ -164,7 +202,7 @@ public class BattleManager : MonoBehaviour
     private void TextAnimation(TMP_Text T_Text, bool side, string info, Color c, Vector3 add)
     {
         var text = Instantiate(T_Text, T_Text.gameObject.transform.parent);
-        text.transform.localPosition = (side ? P1.transform.localPosition : P2.transform.localPosition) + add;
+        text.transform.localPosition = (side ? P1.transform.localPosition : P2.transform.localPosition) + add + new Vector3(UnityEngine.Random.Range(-0.1f, 0.1f), UnityEngine.Random.Range(-0.1f, 0.1f), 0) ;
         Vector3 direction = text.transform.position - BattleCam.transform.position;
         text.transform.rotation = Quaternion.LookRotation(direction);
         text.text = info;
@@ -185,30 +223,25 @@ public class BattleManager : MonoBehaviour
 
     public void SwitchPiece(Entity e, bool side)
     {
-        StartCoroutine(SwitchPieceCor(side ? player1 : player2, e, side ? P1 : P2, side ? player1Others[e] : player2Others[e], side ? Pos1 : Pos2, side ? Pos1Behind : Pos2Behind, side));
+        StartCoroutine(SwitchPieceCor(e, side));
     }
 
-    private IEnumerator SwitchPieceCor(Entity e1, Entity e2, GameObject P1, GameObject P2, Transform Pos1, Transform Pos2, bool side)
+    private IEnumerator SwitchPieceCor(Entity e, bool side)
     {
         Tween.Position(P1.transform, Pos2.position, 0.5f, 0, Tween.EaseIn);
         yield return new WaitForSeconds(0.75f);
         Tween.Position(P2.transform, Pos1.position, 0.5f, 0, Tween.EaseOut);
         yield return new WaitForSeconds(0.5f);
 
-        if (side)
-        {
-            player1 = e2;            
-            player1Others.Remove(e2);
-            player1Others.Add(e1, P1);
-            this.P1 = P2;
-        }
-        else
-        {
-            player2 = e2;
-            player2Others.Remove(e2);
-            player2Others.Add(e1, P1);
-            this.P2 = P2;
-        }
+        var team = side ? player1Team : player2Team;
+
+        var entry = team.Single(p => p.Value.Item2);
+        team[entry.Key] = (entry.Value.Item1, false);
+
+        var newEntry = player1Team.Single(p => p.Value.Item1 == e);
+        team[newEntry.Key] = (newEntry.Value.Item1, true);
+
+
         BattleUI.Create(this);
         Turn++;
         BattleUI.UpdateUI();

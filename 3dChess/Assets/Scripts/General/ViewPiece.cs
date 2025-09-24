@@ -85,6 +85,7 @@ public class ViewPiece : MonoBehaviour
 
         S_Health.maxValue = e.MaxHealth;
         S_Health.value = e.Health;
+        S_Health.fillRect.GetComponent<Image>().color = S_Health.value == 0 ? Color.red : Color.green;
 
         var expBounds = e.GetExpTresholdBounds();
         S_Exp.minValue = expBounds.Item1;

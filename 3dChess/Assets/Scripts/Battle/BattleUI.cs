@@ -50,7 +50,7 @@ public class BattleUI : MonoBehaviour
             g.GetComponentInChildren<TMP_Text>().text = m.Name;
             MoveUI.Add(g);
             g.SetActive(true);
-            g.GetComponent<Button>().onClick.AddListener(() => { BattleManager.ProcessMove(m); });
+            g.GetComponent<Button>().onClick.AddListener(() => { BattleManager.ProcessMove(m, true); });
         }
         UpdateUI();
     }
@@ -58,8 +58,9 @@ public class BattleUI : MonoBehaviour
     public void UpdateHealth()
     {
         print("Animating health bar");
-        Tween.Value(S_P1.value, BattleManager.player1.Health, (val) => { S_P1.value = val; }, 0.5f, 0, Tween.EaseInOut, completeCallback: () => { S_P1.value = BattleManager.player1.Health; } );
-        Tween.Value(S_P2.value, BattleManager.player2.Health, (val) => { S_P2.value = val; }, 0.5f, 0, Tween.EaseInOut, completeCallback: () => { S_P2.value = BattleManager.player2.Health; } );
+        int h1 = BattleManager.player1.Health, h2 = BattleManager.player2.Health;
+        Tween.Value(S_P1.value, BattleManager.player1.Health, (val) => { S_P1.value = val; }, 0.5f, 0, Tween.EaseInOut, completeCallback: () => { S_P1.value = h1; } );
+        Tween.Value(S_P2.value, BattleManager.player2.Health, (val) => { S_P2.value = val; }, 0.5f, 0, Tween.EaseInOut, completeCallback: () => { S_P2.value = h2; } );
     }
 
     public void UpdateUI()
@@ -75,7 +76,7 @@ public class BattleUI : MonoBehaviour
         Tab_SwitchPiece.SetActive(b);
         if (!b) return;
 
-        var pieces = Ref.BattleManager.player1Others;
+        var pieces = Ref.BattleManager.player1Team;
 
         foreach(var p in SwitchPieces)
         {

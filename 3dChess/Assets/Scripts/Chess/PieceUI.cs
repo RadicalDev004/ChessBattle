@@ -11,6 +11,7 @@ public class PieceUI : MonoBehaviour
     public bool Type;
     public Color C1, C2;
     public Transform target;
+    
 
     public void Create(string name, string level, int health, int maxHealth, bool type)
     {

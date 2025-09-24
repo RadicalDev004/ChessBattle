@@ -59,6 +59,12 @@ public class LayoutEdit : MonoBehaviour
             ListPiecesUI.Add(newListPiece);
 
             if (p.Position == -1) continue;
+            if(p.Health <= 0)
+            {
+                p.Position = -1;
+                p.Health = 0;
+                continue;
+            }
 
             var newPieceGraphic = Instantiate(OrgPieceGraphic, LayoutParent.transform);
             newPieceGraphic.Create(p, p.Position);
@@ -69,6 +75,7 @@ public class LayoutEdit : MonoBehaviour
             PieceGraphics.Add(newPieceGraphic);
         }
         UpdateLimit();
+        player.SavePieces();
     }
 
     public void RefersListhPiecesUI()

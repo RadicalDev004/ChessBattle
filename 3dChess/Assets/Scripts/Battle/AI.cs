@@ -20,7 +20,7 @@ public class AI : MonoBehaviour
         {
             yield return new WaitUntil(() => Ref.BattleManager.Turn % 2 == 1);
             yield return new WaitForSeconds(2);
-            Ref.BattleManager.ProcessMove(Ref.BattleManager.player2.Moves[Random.Range(0, Ref.BattleManager.player2.Moves.Count)]);
+            Ref.BattleManager.ProcessMove(Ref.BattleManager.player2.Moves[Random.Range(0, Ref.BattleManager.player2.Moves.Count)], false);
         }     
     }
 }

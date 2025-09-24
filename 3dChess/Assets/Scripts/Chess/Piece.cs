@@ -178,13 +178,14 @@ public abstract class Piece : Entity
     }
 
     public void BattleEndListener(BattleManager.BattleResult result, Tile tile)
-    {
-        Debug.Log("Winner from piece: " + result + " " + side);
-        if(!(result == BattleManager.BattleResult.Won) && side || (result == BattleManager.BattleResult.Won) && !side || (result == BattleManager.BattleResult.Fleed))
+    {        
+        int sideToInt = side ? 1 : 0;
+        Debug.Log("Winner from piece: " + result + " " + side + " " + sideToInt);
+        if (sideToInt != (int)result)
         {
             Tween.LocalPosition(transform, new Vector3(orgTile.transform.position.x, normalY, orgTile.transform.position.z), 0.25f, 0, Tween.EaseOut);
         }
-        else if((result == BattleManager.BattleResult.Won) && !side || !(result == BattleManager.BattleResult.Won) && side)
+        else
         {
             movesCnt++;
             tile.currentPiece = this;
