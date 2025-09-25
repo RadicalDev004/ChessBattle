@@ -15,15 +15,21 @@ public class ListPieceUI : MonoBehaviour, IDragHandler, IEndDragHandler
     public LayoutEdit LayoutEdit;
     public PieceGraphic PieceGraphic;
     public GameObject Overlay;
+    private float fitTo;
 
     private UnityEngine.UI.Outline Outline;
 
+    private void Awake()
+    {
+        fitTo = Icon.rectTransform.sizeDelta.x;
+    }
 
     public void Create(EntityData data)
     {
         thisEntity = data;
         T_Name.text = thisEntity.Name;
         T_Type.text = $"<b><i>{thisEntity.PieceType}</b></i>";
+        T_Type.color = GameColors.GetColorByType(data.PieceType);
         T_Level.text = "lvl " + thisEntity.Level;
         S_Health.maxValue = thisEntity.MaxHealth;
         S_Health.value = thisEntity.Health;
@@ -80,7 +86,7 @@ public class ListPieceUI : MonoBehaviour, IDragHandler, IEndDragHandler
         Sprite mySprite = Resources.Load<Sprite>($"{thisEntity.PieceType}/{thisEntity.Variant}");
 
         Icon.sprite = mySprite;
-        FitImageToSize(Icon, Icon.rectTransform.sizeDelta.x);
+        FitImageToSize(Icon, fitTo);
     }
     public void FitImageToSize(Image img, float size)
     {

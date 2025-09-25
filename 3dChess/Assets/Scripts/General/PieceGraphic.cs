@@ -18,16 +18,17 @@ public class PieceGraphic : MonoBehaviour, IDragHandler,IEndDragHandler
     public int position = -1;
     [HideInInspector]
     public LayoutEdit LayoutEdit;
+    private float fitTo;
 
     private void Awake()
     {
-        
+        Icon = GetComponent<Image>();
         rectTransform = GetComponent<RectTransform>();
+        fitTo = Icon.rectTransform.sizeDelta.x;
     }
 
     public void Create(EntityData e, int position)
-    {
-        Icon = GetComponent<Image>();
+    {       
         thisEntity = e;
         T_Name.text = e.Name;
         this.position = position;
@@ -36,11 +37,13 @@ public class PieceGraphic : MonoBehaviour, IDragHandler,IEndDragHandler
 
     public void OnDrag(PointerEventData eventData)
     {
+        LayoutEdit.RemovePieceGraphicHelper.SetActive(true);
         rectTransform.anchoredPosition += eventData.delta;
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        LayoutEdit.RemovePieceGraphicHelper.SetActive(false);
         int pos = LayoutEdit.GetTileIndexFronPosition(rectTransform.localPosition);
         if (pos == -2 ||(pos == -1 && position == -1))
         {
@@ -66,7 +69,7 @@ public class PieceGraphic : MonoBehaviour, IDragHandler,IEndDragHandler
         Sprite mySprite = Resources.Load<Sprite>($"{thisEntity.PieceType}/{thisEntity.Variant}");
 
         Icon.sprite = mySprite;
-        FitImageToSize(Icon, Icon.rectTransform.sizeDelta.x);
+        FitImageToSize(Icon, fitTo);
     }
     public void FitImageToSize(Image img, float size)
     {

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,9 @@ public class LayoutEdit : MonoBehaviour
     public TMP_Text T_Limit;
     public TMP_Text T_Warning;
 
+    public GameObject RemovePieceGraphicHelper;
+    public TMP_Dropdown D_SortMethod;
+
     public int Limit = 8;
 
     public Color C1, C2;
@@ -29,8 +33,26 @@ public class LayoutEdit : MonoBehaviour
     private void Start()
     {
         player.LayoutEdit = this;
+
+        
+        PrepareSort();
+
         GenerateSquares();       
-        Invoke(nameof(PlacePieces), 0.5f);
+        Invoke(nameof(PlacePieces), 0.5f);       
+    }
+
+    public void PrepareSort()
+    {      
+        D_SortMethod.value = PlayerPrefs.GetInt("sortMethod");
+        D_SortMethod.RefreshShownValue();
+        D_SortMethod.onValueChanged.AddListener(OnSortMethodChange);
+    }
+
+    public void OnSortMethodChange(int option)
+    {
+      
+        PlayerPrefs.SetInt("sortMethod", option);
+        RefreshListhPiecesUI(option);
     }
 
     public void GenerateSquares()
@@ -67,27 +89,39 @@ public class LayoutEdit : MonoBehaviour
             }
 
             var newPieceGraphic = Instantiate(OrgPieceGraphic, LayoutParent.transform);
+            newPieceGraphic.gameObject.SetActive(true);
             newPieceGraphic.Create(p, p.Position);
             newPieceGraphic.LayoutEdit = this;
 
-            newPieceGraphic.GetComponent<RectTransform>().localPosition = Squares[p.Position].GetComponent<RectTransform>().localPosition;
-            newPieceGraphic.gameObject.SetActive(true);
+            newPieceGraphic.GetComponent<RectTransform>().localPosition = Squares[p.Position].GetComponent<RectTransform>().localPosition;            
             PieceGraphics.Add(newPieceGraphic);
         }
+        RefreshListhPiecesUI();
         UpdateLimit();
         player.SavePieces();
     }
 
-    public void RefersListhPiecesUI()
+    public void RefreshListhPiecesUI(int sortMethod = -1)
     {
-        foreach(var p in ListPiecesUI)
+        if (sortMethod == -1)
+            sortMethod = PlayerPrefs.GetInt("sortMethod");
+
+        foreach (var p in ListPiecesUI)
         {
             Destroy(p.gameObject);
         }
         ListPiecesUI.Clear();
 
+        IComparer<EntityData> comparer = sortMethod switch
+        {
+            0 => Comparer<EntityData>.Create((a, b) => b.Exp.CompareTo(a.Exp)),
+            1 => Comparer<EntityData>.Create((a, b) => b.Health.CompareTo(a.Health)),
+            2 => Comparer<EntityData>.Create((a, b) => b.PieceType.CompareTo(a.PieceType)),
+            3 => Comparer<EntityData>.Create((a, b) => string.Compare(a.Name, b.Name, StringComparison.Ordinal)),
+            _ => Comparer<EntityData>.Create((a, b) => b.Exp.CompareTo(a.Exp)),
+        };
 
-        foreach (var p in player.PiecesInventory)
+        foreach (var p in player.PiecesInventory.OrderBy(kvp => kvp, comparer))
         {
             var newListPiece = Instantiate(OrgListPiece, ListPieceParent.transform);
             newListPiece.gameObject.SetActive(true);
@@ -114,10 +148,10 @@ public class LayoutEdit : MonoBehaviour
     public PieceGraphic CreatePieceGraphic(Vector3 pos, EntityData p)
     {
         var newPieceGraphic = Instantiate(OrgPieceGraphic, LayoutParent.transform);
+        newPieceGraphic.gameObject.SetActive(true);
         newPieceGraphic.Create(p, p.Position);
         newPieceGraphic.LayoutEdit = this;
-        newPieceGraphic.GetComponent<RectTransform>().position = pos;
-        newPieceGraphic.gameObject.SetActive(true);
+        newPieceGraphic.GetComponent<RectTransform>().position = pos;       
         PieceGraphics.Add(newPieceGraphic);
         return newPieceGraphic;
     }

@@ -70,7 +70,6 @@ public class PlayerBehaviour : MonoBehaviour
 
     public void SavePieces()
     {
-        print(PiecesInventory.Count);
         InventoryData data = new()
         {
             Inventory = PiecesInventory
@@ -98,14 +97,14 @@ public class PlayerBehaviour : MonoBehaviour
             var piece = Variants.GetRandom();
             PiecesInventory.Add(piece);
             SavePieces();
-            LayoutEdit.RefersListhPiecesUI();
+            LayoutEdit.RefreshListhPiecesUI();
         }
         if (other.CompareTag("test2"))
         {
             var piece = Variants.GetRandomOfType(EntityData.Type.King);
             PiecesInventory.Add(piece);
             SavePieces();
-            LayoutEdit.RefersListhPiecesUI();
+            LayoutEdit.RefreshListhPiecesUI();
         }
     }
 

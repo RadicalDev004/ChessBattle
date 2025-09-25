@@ -125,7 +125,7 @@ public class ViewPiece : MonoBehaviour
         thisEntity.Name = In_Name.text;
         Tab_ChangeName.SetActive(false);
         T_Name.text = thisEntity.Name;
-        FindObjectOfType<LayoutEdit>().RefersListhPiecesUI();
+        FindObjectOfType<LayoutEdit>().RefreshListhPiecesUI();
         FindAnyObjectByType<PlayerBehaviour>().SavePieces();
     }
 }
