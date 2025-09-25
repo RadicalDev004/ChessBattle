@@ -64,8 +64,10 @@ public class ViewPiece : MonoBehaviour
 
         if(CurrentPiece != null) 
             Destroy(CurrentPiece);
+
         CurrentPiece = Instantiate(Pieces[(int)e.PieceType], transform);
         CurrentPiece.transform.localPosition = PodiumPos;
+        CurrentPiece.GetComponent<MeshRenderer>().material = Resources.Load<Material>($"Materials/{thisEntity.Variant}");
         CurrentPiece.SetActive(true);
         State = true;
 
@@ -125,8 +127,9 @@ public class ViewPiece : MonoBehaviour
         thisEntity.Name = In_Name.text;
         Tab_ChangeName.SetActive(false);
         T_Name.text = thisEntity.Name;
-        FindObjectOfType<LayoutEdit>().RefreshListhPiecesUI();
         FindAnyObjectByType<PlayerBehaviour>().SavePieces();
+        FindObjectOfType<LayoutEdit>().RefreshListPiecesUI();
+        
     }
 }
 

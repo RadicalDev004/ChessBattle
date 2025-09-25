@@ -52,7 +52,7 @@ public class LayoutEdit : MonoBehaviour
     {
       
         PlayerPrefs.SetInt("sortMethod", option);
-        RefreshListhPiecesUI(option);
+        RefreshListPiecesUI(option);
     }
 
     public void GenerateSquares()
@@ -96,12 +96,12 @@ public class LayoutEdit : MonoBehaviour
             newPieceGraphic.GetComponent<RectTransform>().localPosition = Squares[p.Position].GetComponent<RectTransform>().localPosition;            
             PieceGraphics.Add(newPieceGraphic);
         }
-        RefreshListhPiecesUI();
+        RefreshListPiecesUI();
         UpdateLimit();
         player.SavePieces();
     }
 
-    public void RefreshListhPiecesUI(int sortMethod = -1)
+    public void RefreshListPiecesUI(int sortMethod = -1)
     {
         if (sortMethod == -1)
             sortMethod = PlayerPrefs.GetInt("sortMethod");

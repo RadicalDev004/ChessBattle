@@ -97,14 +97,14 @@ public class PlayerBehaviour : MonoBehaviour
             var piece = Variants.GetRandom();
             PiecesInventory.Add(piece);
             SavePieces();
-            LayoutEdit.RefreshListhPiecesUI();
+            LayoutEdit.RefreshListPiecesUI();
         }
         if (other.CompareTag("test2"))
         {
             var piece = Variants.GetRandomOfType(EntityData.Type.King);
             PiecesInventory.Add(piece);
             SavePieces();
-            LayoutEdit.RefreshListhPiecesUI();
+            LayoutEdit.RefreshListPiecesUI();
         }
     }
 
