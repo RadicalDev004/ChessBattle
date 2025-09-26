@@ -56,6 +56,8 @@ public abstract class Piece : Entity
         //Moves = e.Moves;
 
         ActivatePieceUI();
+
+        GetComponent<MeshRenderer>().material = !side && e.Variant == "basic" ? Resources.Load<Material>($"Materials/black") :  Resources.Load<Material>($"Materials/{e.Variant}");
         //MakeMoves();
     }
 
