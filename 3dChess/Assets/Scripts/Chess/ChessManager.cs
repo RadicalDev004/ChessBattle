@@ -9,6 +9,7 @@ public class ChessManager : MonoBehaviour
 {    
     public List<Piece> OrgPieces = new();
     public static int Turn = 0;
+    public List<EntityData> AllWhites = new();
     public List<Piece> WhitePieces = new(), BlackPieces = new();
     public ChessUI ChessUI;
 
@@ -31,6 +32,7 @@ public class ChessManager : MonoBehaviour
 
         foreach(var piece in whiteData.Inventory)
         {
+            AllWhites.Add(piece);
             if (piece.Position == -1) continue;
 
             var p = Instantiate(OrgPieces[(int)piece.PieceType]);
@@ -57,7 +59,7 @@ public class ChessManager : MonoBehaviour
     {
         InventoryData whiteData = new()
         {
-            Inventory = WhitePieces.Select(p => p.Data).ToList()
+            Inventory = AllWhites
         };
 
         string json = JsonConvert.SerializeObject(whiteData, Formatting.Indented);
