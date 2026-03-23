@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 public class HospitalSlotUI : MonoBehaviour
 {
-    private static WaitForSecondsRealtime _waitForSeconds1 = new(1);
+    private readonly WaitForSecondsRealtime _waitForSeconds1 = new(1);
     public TMP_Text T_Name, T_Time;
     public GameObject HSlot;
     public Slider S_Health;
@@ -82,6 +82,7 @@ public class HospitalSlotUI : MonoBehaviour
 
         while (PieceGraphic.thisEntity.Health < PieceGraphic.thisEntity.MaxHealth)
         {
+            print("HEaling " + PieceGraphic.thisEntity.Name);
             yield return _waitForSeconds1;
             PieceGraphic.thisEntity.Health++;
             S_Health.value = PieceGraphic.thisEntity.Health;  

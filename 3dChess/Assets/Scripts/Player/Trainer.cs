@@ -14,17 +14,23 @@ public class Trainer : MonoBehaviour
     public string ChallengeText, DefeatedText;
     public bool Defeated;
 
+    public NpcInfo NpcInfo;
+
     private Quaternion InitialRotation;
 
     private void Awake()
     {
+        NpcInfo.Create(false);
         InitialRotation = transform.rotation;
     }
+
 
     public void Create(TrainerData data)
     {
         Name = data.Name;
         Defeated = data.Defeated;
+
+        NpcInfo.Create(Defeated);
     }
 
     public void Speak()

@@ -37,6 +37,9 @@ public class ViewPiece : MonoBehaviour
     public GameObject Tab_ChangeName;
     public TMP_InputField In_Name;
 
+    [Header("Other")]
+    public Button B_Release;
+
     private void FixedUpdate()
     {
         if (!State) return;
@@ -111,6 +114,16 @@ public class ViewPiece : MonoBehaviour
 
         T_Health.text = $"{e.Health}/{e.MaxHealth}";
         T_Exp.text = $"{(int)(S_Exp.value - S_Exp.minValue)}/{S_Exp.maxValue - S_Exp.minValue}";
+
+        B_Release.onClick.RemoveAllListeners();
+        B_Release.onClick.AddListener(() =>
+        {
+            GameRef.ReleaseTab.Create(thisEntity, () =>
+            {
+                CloseViewPiece();
+                GameRef.LayoutEdit.RefreshListPiecesUI();
+            });
+        });
     }
 
     public void CloseViewPiece()

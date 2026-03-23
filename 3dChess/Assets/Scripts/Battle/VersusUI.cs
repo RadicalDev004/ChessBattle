@@ -21,10 +21,14 @@ public class VersusUI : MonoBehaviour
 
         I_Attacker.sprite = Resources.Load<Sprite>($"Icons/{attacker.PieceType}/{attacker.Variant}");
         I_Defender.sprite = Resources.Load<Sprite>($"Icons/{defender.PieceType}/{defender.Variant}");
+
+        I_Attacker.color= I_Defender.color = Color.white;
+
         if (attacker.Variant == "basic" && !attacker.side)
             I_Attacker.color = Color.gray;
         if (defender.Variant == "basic" && !defender.side)
-            I_Attacker.color = Color.gray;
+            I_Defender.color = Color.gray;
+
         I_Attacker.Fit(350);
         I_Defender.Fit(350);
 

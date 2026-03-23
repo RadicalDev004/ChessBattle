@@ -120,5 +120,10 @@ public class EntityData
     {
         return MaxHealth - Health;
     }
+
+    public int GetCoinsOnRelease()
+    {
+        return Level + ((int)PieceType + 1) * 5 + Moves.Sum(m => ((int)m.Rarity + 1) * 5);
+    }
 }
 

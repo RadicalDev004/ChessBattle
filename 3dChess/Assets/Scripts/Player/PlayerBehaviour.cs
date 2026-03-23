@@ -93,7 +93,11 @@ public class PlayerBehaviour : MonoBehaviour
             GameRef.UI.ActivateTab(GameRef.UI.Tab_Hospital);
             GameRef.HospitalEdit.RefreshListPiecesUI();
         }
-
+        if (other.CompareTag("shop"))
+        {
+            GameRef.UI.ActivateTab(GameRef.UI.Tab_Shop);
+            GameRef.ShopManager.UpdateCoins();
+        }
     }
 
     public EntityData AddPieceToInventory(EntityData e)
@@ -196,6 +200,12 @@ public class PlayerBehaviour : MonoBehaviour
         GetComponent<CharacterController>().enabled = false;
         transform.position = pos;
         GetComponent<CharacterController>().enabled = true;
+    }
+
+    public void ReleasePiece(EntityData piece)
+    {
+        var found = PiecesInventory.Find(e => e == piece);
+        PiecesInventory.Remove(found);
     }
 
     private void OnDisable()

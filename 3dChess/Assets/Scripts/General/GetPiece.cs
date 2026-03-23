@@ -12,7 +12,7 @@ public class GetPiece : MonoBehaviour
     public GetMoveUI OriginalGetMoveUI;
     public List<GetMoveUI> CurrentMoves = new();
     public Slider S_Attack, S_Defense, S_Speed, S_Luck;
-    
+    public Button B_Release;
 
     public void Create(EntityData e)
     {
@@ -46,6 +46,15 @@ public class GetPiece : MonoBehaviour
         }
 
         GetIcon();
+
+        B_Release.onClick.RemoveAllListeners();
+        B_Release.onClick.AddListener(() =>
+        {
+            GameRef.ReleaseTab.Create(e, () =>
+            {
+                GameRef.BoxBehaviour.Close();
+            });
+        });
     }
 
     public void GetIcon()

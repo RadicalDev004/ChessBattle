@@ -33,6 +33,15 @@ public class GameRef : MonoBehaviour
     public HospitalEdit hospitalEdit;
     public static HospitalEdit HospitalEdit { get { return Instance.hospitalEdit; } }
 
+    public ShopManager shopManager;
+    public static ShopManager ShopManager { get { return Instance.shopManager; } }
+
+    public ReleaseTab releaseTab;
+    public static ReleaseTab ReleaseTab { get { return Instance.releaseTab; } }
+
+    public BoxBehaviour boxBehaviour;
+    public static BoxBehaviour BoxBehaviour { get { return Instance.boxBehaviour; } }
+
     private void Awake()
     {
         if(Instance == null)

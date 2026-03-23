@@ -9,4 +9,5 @@ public class SaveData
     public Vector3Data Position;
     public PieceFoundData PieceFoundData;
     public int? HouseIndex;
+    public int Coins;
 }

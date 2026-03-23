@@ -25,6 +25,7 @@ public class SaveManager : MonoBehaviour
             Pieces = player.PiecesInventory, 
             Potions = player.PotionInventory 
         };
+        sv.Coins = PlayerPrefs.GetInt("coins", 0);
         sv.Position = player.transform.position;
         sv.PieceFoundData = player.pieceFoundData;
         sv.HouseIndex = GameRef.HouseManager.GetCurentHouseIndex();
@@ -60,6 +61,9 @@ public class SaveManager : MonoBehaviour
                 GameRef.HouseManager.GetHousebyIndex(sv.HouseIndex.Value).EnterHouse(false);
             }
         }
+
+        PlayerPrefs.SetInt("coins", sv?.Coins ?? 0);
+
         player.PiecesInventory = sv == null ? new() : sv.InventoryData.Pieces;
         player.PotionInventory = sv == null ? new() : sv.InventoryData.Potions;
         player.PiecesInventory ??= new();

@@ -9,6 +9,7 @@ public class UI : MonoBehaviour
     public GameObject B_EnterHouse, B_ExitHouse;
     public GameObject B_SeachItem;
 
+    public CanvasGroup Tab_Shop;
     public CanvasGroup Tab_Hospital;
 
     public void ToggleEnterHouse(bool toggle)
@@ -32,6 +33,7 @@ public class UI : MonoBehaviour
     public void ActivateTab(CanvasGroup canvasGroup)
     {
         canvasGroup.Activate();
+        Movement.IsPaused = true;
     }
 
     public void DeActivateTab(CanvasGroup canvasGroup)

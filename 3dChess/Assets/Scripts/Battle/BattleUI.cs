@@ -30,8 +30,8 @@ public class BattleUI : MonoBehaviour
 
     public void Create(BattleManager battleManager)
     {
-        TweenBaseList.ForEach(t => t.Stop());
-        TweenBaseList.Clear();
+        //TweenBaseList.ForEach(t => t.Stop());
+        //TweenBaseList.Clear();
 
         BattleManager = battleManager;
 

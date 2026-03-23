@@ -138,6 +138,13 @@ public class EffectManager : MonoBehaviour
         Tween.LocalPosition(text.transform, text.transform.localPosition + new Vector3(0, 0.2f, 0), 1f, 0, Tween.EaseOut, completeCallback: () => { Destroy(text.gameObject); });
     }
 
+    public int GetEffectTypeRemainingTurns(bool side, Effect.Type type)
+    {
+        var list = side ? P1List : P2List;
+        var effect = list.Find(e => e.type == type);
+        return effect != null ? effect.rounds : 0;
+    }
+
     public int GetEffectCount(bool side, bool? kind, Effect.Type? type)
     {
         var list = side ? P1List : P2List;

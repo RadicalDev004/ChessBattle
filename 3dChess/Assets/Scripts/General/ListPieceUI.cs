@@ -30,8 +30,9 @@ public class ListPieceUI : MonoBehaviour, IDragHandler, IEndDragHandler
         T_Level.text = "lvl " + thisEntity.Level;
         S_Health.maxValue = thisEntity.MaxHealth;
         S_Health.value = thisEntity.Health;
-        if (S_Health.value == 0 || thisEntity.Position < -1)
+        if (S_Health.value <= 0 || thisEntity.Position < -1)
             Overlay.SetActive(true);
+
         HospitalOverlay.SetActive(thisEntity.Position < -1);
 
         GetComponent<Button>().onClick.RemoveAllListeners();

@@ -64,7 +64,7 @@ public class TrainerSpeak : MonoBehaviour
         var initialHeight = I_TrainerPic.GetComponent<RectTransform>().sizeDelta.y;
         var sprt = Resources.Load<Sprite>($"Icons/Trainers/{thisTrainer.Name}");
         I_TrainerPic.sprite = sprt != null ? sprt : null;
-        I_TrainerPic.FitSpecific(true, I_TrainerPic.GetComponent<RectTransform>().sizeDelta.x);
+        I_TrainerPic.Fit(615, true);
 
         I_TrainerPic.GetComponent<RectTransform>().localPosition = new Vector2(
             I_TrainerPic.GetComponent<RectTransform>().localPosition.x,

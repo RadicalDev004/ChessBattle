@@ -17,6 +17,7 @@ public class BoxBehaviour : MonoBehaviour
     public PlayerBehaviour player;
     public GameObject Basic;
     public ParticleSystem Before, After;
+    
 
     void Start()
     {
@@ -42,7 +43,7 @@ public class BoxBehaviour : MonoBehaviour
         Helper.ActionAfterTime(0.5f, () => {
             ShakeAnim = Tween.Shake(Box.transform, Box.transform.localPosition, Vector3.one * 0.01f, 2, 0, loop: Tween.LoopType.Loop);
             IsReady = true;
-        });       
+        });
     }
     public void OpenBox()
     {
@@ -50,7 +51,7 @@ public class BoxBehaviour : MonoBehaviour
         After.Play();
         IsReady = false;
         ShakeAnim.Stop();
-        Box.SetActive(false);        
+        Box.SetActive(false);
         var p = player.AddPieceToInventory(Variants.GetRandom());
 
         CurrentPiece = Instantiate(Pieces[(int)p.PieceType], Pieces[(int)p.PieceType].transform.parent);
@@ -67,9 +68,8 @@ public class BoxBehaviour : MonoBehaviour
                 GetPiece.Create(p);
             });
         });
-                
     }
-    
+
     public void Close()
     {
         After.Stop();

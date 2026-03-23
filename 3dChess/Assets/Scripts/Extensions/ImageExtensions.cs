@@ -12,6 +12,13 @@ public static class ImageExtensions
         float rate = max / size;
         image.rectTransform.sizeDelta /= rate;
     }
+    public static void Fit(this Image image, float size, bool min = false)
+    {
+        image.SetNativeSize();
+        float target = min ? Mathf.Min(image.rectTransform.sizeDelta.x, image.rectTransform.sizeDelta.y) : Mathf.Max(image.rectTransform.sizeDelta.x, image.rectTransform.sizeDelta.y);
+        float rate = target / size;
+        image.rectTransform.sizeDelta /= rate;
+    }
     public static void FitSpecific(this Image image, bool side, float size)
     {
         image.SetNativeSize();

@@ -5,7 +5,7 @@ using UnityEngine;
 public class Movement : MonoBehaviour
 {
     private CharacterController Controller;
-    private Animator Animator;
+    public Animator Animator;
     public Transform Cam;
     public float speed = 12f;
     public float jumpForce = 5;
