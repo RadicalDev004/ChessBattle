@@ -29,10 +29,10 @@ public class ShopSlotU : MonoBehaviour
 
     public void Buy()
     {
-        if (PlayerPrefs.GetInt("coins", 0) < Cost)
+        if (ShopManager.Coins < Cost)
             return;
 
-        PlayerPrefs.SetInt("coins", PlayerPrefs.GetInt("coins", 0) - Cost);
+        ShopManager.Coins -= Cost;
         GameRef.ShopManager.UpdateCoins();
 
         OnBuy.Invoke();

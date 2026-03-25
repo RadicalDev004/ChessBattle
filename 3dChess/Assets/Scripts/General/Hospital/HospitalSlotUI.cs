@@ -80,21 +80,44 @@ public class HospitalSlotUI : MonoBehaviour
         HealthAnimation.GetComponent<RectTransform>().localPosition = new Vector3(-125, 0, 0);
         HealthTween = Tween.LocalPosition(HealthAnimation.GetComponent<RectTransform>(), new Vector3(125, 0, 0), 1, 0, loop: Tween.LoopType.Loop);
 
-        while (PieceGraphic.thisEntity.Health < PieceGraphic.thisEntity.MaxHealth)
+        while (PieceGraphic.thisEntity != null && PieceGraphic.thisEntity.Health < PieceGraphic.thisEntity.MaxHealth)
         {
-            print("HEaling " + PieceGraphic.thisEntity.Name);
+            print("Healing " + PieceGraphic.thisEntity.Name);
             yield return _waitForSeconds1;
+
             PieceGraphic.thisEntity.Health++;
-            S_Health.value = PieceGraphic.thisEntity.Health;  
-            GameRef.HospitalEdit.GetPieceUIByPieceGraphic(PieceGraphic).UpdateHealth();
+            S_Health.value = PieceGraphic.thisEntity.Health;
+
+            try
+            {
+                GameRef.HospitalEdit.GetPieceUIByPieceGraphic(PieceGraphic).UpdateHealth();
+            }
+            catch (NullReferenceException)
+            {
+                break;
+            }
         }
 
         HealthAnimation.SetActive(false);
         HealthTween?.Stop();
 
-        PieceGraphic.thisEntity.Position = -1;
         GameRef.HospitalEdit.RemovePieceGraphic(PieceGraphic);
         GameRef.HospitalEdit.RefreshListPiecesUI();
         Clear();
+    }
+
+    public void Refresh()
+    {
+        if(!GameRef.PlayerBehaviour.HasPieceInLayout(PieceGraphic.thisEntity))
+        {
+            HealthAnimation.SetActive(false);
+            HealthTween?.Stop();
+
+            if (healCoroutine != null)
+                StopCoroutine(healCoroutine);
+
+            GameRef.HospitalEdit.RemovePieceGraphic(PieceGraphic);
+            Clear();         
+        }
     }
 }

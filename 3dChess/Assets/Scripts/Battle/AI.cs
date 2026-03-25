@@ -147,10 +147,17 @@ public class AI : MonoBehaviour
         float playerHealthQuality = 100f * whitePlayer.Health / whitePlayer.MaxHealth;
 
         foreach (var potion in Ref.ChessManager.BlackData.Potions)
-            potionChoices[potion] = 0;
+        {    
+            potionChoices[potion] = 0; 
+        }
 
+        int i = 0;
         foreach (var move in blackPlayer.Moves.Where(m => m.Count > 0))
-            moveChoices[move] = 0;
+        { 
+            if(Move.MoveIndToLvlRequired(i) < blackPlayer.Level)
+                moveChoices[move] = 0;
+            i++;
+        }
 
         foreach (var piece in Ref.BattleManager.blackTeam)
         {

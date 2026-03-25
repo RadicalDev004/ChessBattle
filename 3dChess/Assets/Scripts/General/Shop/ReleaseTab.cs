@@ -26,7 +26,7 @@ public class ReleaseTab : MonoBehaviour
         var amount = p.GetCoinsOnRelease();
 
         T_Coins.text = amount.ToSpacedNumber();
-        T_Info.text = $"Are you sure you want to release <b>{p.Name}</b> for coins?";
+        T_Info.text = $"Are you sure you want to release <i><b>{p.Name}</b></i> for coins?";
 
         B_Keep.onClick.RemoveAllListeners();
         B_Release.onClick.RemoveAllListeners();
@@ -38,6 +38,7 @@ public class ReleaseTab : MonoBehaviour
             PlayerPrefs.SetInt("coins", PlayerPrefs.GetInt("coins") + amount);
             GameRef.PlayerBehaviour.ReleasePiece(p);
             OnRelease?.Invoke();
+            GameRef.PlayerBehaviour.SaveManager.SaveGame();
         });
     }
 }

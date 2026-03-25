@@ -42,6 +42,12 @@ public class GameRef : MonoBehaviour
     public BoxBehaviour boxBehaviour;
     public static BoxBehaviour BoxBehaviour { get { return Instance.boxBehaviour; } }
 
+    public StoryManager storyManager;
+    public static StoryManager StoryManager { get { return Instance.storyManager; } }
+
+    public QuestManager questManager;
+    public static QuestManager QuestManager { get { return Instance.questManager; } }
+
     private void Awake()
     {
         if(Instance == null)

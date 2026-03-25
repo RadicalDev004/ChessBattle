@@ -26,4 +26,5 @@ public class VariantsBook : MonoBehaviour
     }
 
     public void ReEnableFitter() => Fitter.enabled = true;
+
 }

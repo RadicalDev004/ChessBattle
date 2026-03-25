@@ -8,6 +8,7 @@ using UnityEngine;
 public class Trainer : MonoBehaviour
 {
     public string Name;
+    public int Zone;
     public List<TrainerPieceInfo> Pieces;
     public List<TrainerPotionInfo> Potions;
     [TextArea(10, 10)]

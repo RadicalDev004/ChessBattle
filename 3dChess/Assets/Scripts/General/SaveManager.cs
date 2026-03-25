@@ -7,6 +7,13 @@ using UnityEngine;
 public class SaveManager : MonoBehaviour
 {
     public PlayerBehaviour player;
+    public bool isSaving = false;
+    public SaveData latestSaveData;
+
+    public int GetCurrentFoundPiecesCount()
+    {
+        return latestSaveData.PieceFoundData.PiecesFound.Count;
+    }    
     
 
     private void Awake()
@@ -17,6 +24,10 @@ public class SaveManager : MonoBehaviour
 
     public void SaveGame()
     {
+        if (isSaving)
+            return;
+        isSaving = true;
+
         SaveData sv = new();
         var allTrainers = FindObjectsOfType<Trainer>().ToList();
         sv.TrainerData = allTrainers.ConvertAll(t => new TrainerData(t));
@@ -25,15 +36,19 @@ public class SaveManager : MonoBehaviour
             Pieces = player.PiecesInventory, 
             Potions = player.PotionInventory 
         };
-        sv.Coins = PlayerPrefs.GetInt("coins", 0);
+        sv.Coins = ShopManager.Coins;
         sv.Position = player.transform.position;
         sv.PieceFoundData = player.pieceFoundData;
         sv.HouseIndex = GameRef.HouseManager.GetCurentHouseIndex();
 
-        string json = JsonConvert.SerializeObject(sv, Formatting.Indented);
-        print(json);
-        PlayerPrefs.SetString("save" + PlayerPrefs.GetString("currentSave"), json);
+        sv.QuestData = GameRef.QuestManager.GetQuestsData();
 
+        string json = JsonConvert.SerializeObject(sv, Formatting.Indented);
+        print("Saving game \n" + json);
+        PlayerPrefs.SetString("save" + PlayerPrefs.GetString("currentSave"), json);
+        latestSaveData = sv;
+
+        isSaving = false;
     }
     public SaveData GetData()
     {
@@ -41,9 +56,10 @@ public class SaveManager : MonoBehaviour
     }
     public void LoadGame()
     {
-        print(PlayerPrefs.GetString("save" + PlayerPrefs.GetString("currentSave")));
+        print("Loading game \n" + PlayerPrefs.GetString("save" + PlayerPrefs.GetString("currentSave")));
         SaveData sv = JsonConvert.DeserializeObject<SaveData>(PlayerPrefs.GetString("save" + PlayerPrefs.GetString("currentSave")));
-        if(sv != null)
+        latestSaveData = sv;
+        if (sv != null)
         {
             player.ChangePlayerPos(sv.Position ?? new Vector3(26, 1.46521699f, 46));
             player.pieceFoundData = sv.PieceFoundData ?? new();
@@ -62,11 +78,17 @@ public class SaveManager : MonoBehaviour
             }
         }
 
-        PlayerPrefs.SetInt("coins", sv?.Coins ?? 0);
+        ShopManager.Coins = sv?.Coins ?? 0;
+        GameRef.QuestManager.SetQuestsData(sv?.QuestData ?? new());
 
         player.PiecesInventory = sv == null ? new() : sv.InventoryData.Pieces;
         player.PotionInventory = sv == null ? new() : sv.InventoryData.Potions;
         player.PiecesInventory ??= new();
         player.pieceFoundData ??= new();      
+    }
+
+    private void OnApplicationQuit()
+    {
+        SaveGame();
     }
 }

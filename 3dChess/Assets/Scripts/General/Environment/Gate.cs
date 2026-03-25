@@ -10,7 +10,7 @@ public class Gate : MonoBehaviour
 
     private void Awake()
     {
-        this.ActionAfterTime(0.5f, () => Open());
+        //this.ActionAfterTime(0.5f, () => Open());
     }
 
     public void Open(float time = 1f)

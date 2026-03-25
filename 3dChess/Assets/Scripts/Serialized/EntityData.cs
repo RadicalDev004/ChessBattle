@@ -27,7 +27,7 @@ public class EntityData
         }
         set
         {
-
+            Exp = Entity.GetExpForLevel(value);
         }
     }
     

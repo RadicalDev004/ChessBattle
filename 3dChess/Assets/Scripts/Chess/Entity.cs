@@ -69,6 +69,13 @@ public abstract class Entity : MonoBehaviour
         8689  // 20
     };
 
+    public static int GetExpForLevel(int level)
+    {
+        if (level < 1 || level > Tresholds.Count)
+            return 0;
+        return Tresholds[level - 1];
+    }
+
     public void GiveExp(float amount)
     {
         amount *= ExpIncrementFactor;

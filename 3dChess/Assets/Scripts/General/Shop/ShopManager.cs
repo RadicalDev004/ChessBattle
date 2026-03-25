@@ -10,6 +10,8 @@ public class ShopManager : MonoBehaviour
     public TMP_Text T_Coins;
     public GameObject ShopIcon;
 
+    public static int Coins;
+
     private void Awake()
     {
         var currY = ShopIcon.transform.position.y;
@@ -27,7 +29,7 @@ public class ShopManager : MonoBehaviour
 
     public void UpdateCoins()
     {
-        T_Coins.text = PlayerPrefs.GetInt("coins", 0).ToSpacedNumber();
+        T_Coins.text = Coins.ToSpacedNumber();
     }
 
     public void GivePotion(int index)
@@ -37,7 +39,7 @@ public class ShopManager : MonoBehaviour
 
     public void GiveCoins(int amount)
     {
-        PlayerPrefs.SetInt("coins", PlayerPrefs.GetInt("coins", 0) + amount);
+        Coins += amount;
         UpdateCoins();
     }
 }

@@ -122,6 +122,7 @@ public class ViewPiece : MonoBehaviour
             {
                 CloseViewPiece();
                 GameRef.LayoutEdit.RefreshListPiecesUI();
+                GameRef.HospitalEdit.RefreshListPiecesUI();
             });
         });
     }

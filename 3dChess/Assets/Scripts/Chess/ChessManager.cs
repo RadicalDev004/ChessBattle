@@ -142,6 +142,7 @@ public class ChessManager : MonoBehaviour
     public void PrepareLocalMatch()
     {
         string white = PlayerPrefs.GetString("save" + PlayerPrefs.GetString("currentSave"));
+        print("deserializing white data:\n" + white);
         string black = PlayerPrefs.GetString("trainer");
         OpponentName = PlayerPrefs.GetString("trainerName");
 

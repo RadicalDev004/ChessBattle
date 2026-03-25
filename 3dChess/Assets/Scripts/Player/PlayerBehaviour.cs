@@ -153,8 +153,11 @@ public class PlayerBehaviour : MonoBehaviour
         GameRef.TrainerSpeak.Create(trainer,
             () =>
             {
+                SaveManager.SaveGame();
                 this.ActionAfterTime(0.5f, () => { CameraFollow.Enabled = true; Movement.IsPaused = false; });
+
                 print("AA\n" + JsonConvert.SerializeObject(trainer.GetInventory()));
+
                 PlayerPrefsExtentions.SetBool("online", false);
                 PlayerPrefs.SetString("trainer", JsonConvert.SerializeObject(trainer.GetInventory(), Formatting.Indented));
                 PlayerPrefs.SetString("trainerName", trainer.Name);
@@ -208,8 +211,8 @@ public class PlayerBehaviour : MonoBehaviour
         PiecesInventory.Remove(found);
     }
 
-    private void OnDisable()
+    public bool HasPieceInLayout(EntityData piece)
     {
-        SaveManager.SaveGame();
+        return PiecesInventory.Any(p => p == piece);
     }
 }
