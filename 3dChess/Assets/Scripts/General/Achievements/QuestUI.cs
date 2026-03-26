@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class QuestUI : MonoBehaviour
 {
+    private Quest thisQuest;
     public TMP_Text T_Name, T_Description, T_Reward;
     public Slider S_Progress;
     public Button B_Claim;
@@ -13,6 +14,8 @@ public class QuestUI : MonoBehaviour
 
     public void Create(Quest quest)
     {
+        thisQuest = quest;
+
         T_Name.text = quest.Name;
         T_Description.text = quest.Description;
         T_Reward.text = $"Reward: <b>{quest.Reward.ToSpacedNumber()}</b>";
@@ -43,5 +46,10 @@ public class QuestUI : MonoBehaviour
                 break;
 
         }
+    }
+
+    public void Refresh()
+    {
+        Create(thisQuest);
     }
 }

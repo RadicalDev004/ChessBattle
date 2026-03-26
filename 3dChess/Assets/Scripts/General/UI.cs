@@ -9,8 +9,7 @@ public class UI : MonoBehaviour
     public GameObject B_EnterHouse, B_ExitHouse;
     public GameObject B_SeachItem;
 
-    public CanvasGroup Tab_Shop;
-    public CanvasGroup Tab_Hospital;
+    public CanvasGroup Tab_Shop, Tab_Quests, Tab_Hospital;
 
     public void ToggleEnterHouse(bool toggle)
     {

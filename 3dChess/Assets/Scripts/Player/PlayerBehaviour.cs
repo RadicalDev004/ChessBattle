@@ -98,6 +98,11 @@ public class PlayerBehaviour : MonoBehaviour
             GameRef.UI.ActivateTab(GameRef.UI.Tab_Shop);
             GameRef.ShopManager.UpdateCoins();
         }
+        if (other.CompareTag("quests"))
+        {
+            GameRef.UI.ActivateTab(GameRef.UI.Tab_Quests);
+            GameRef.QuestManager.RefreshQuestData();
+        }
     }
 
     public EntityData AddPieceToInventory(EntityData e)
