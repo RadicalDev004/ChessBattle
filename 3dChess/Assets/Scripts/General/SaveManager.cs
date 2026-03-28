@@ -12,6 +12,11 @@ public class SaveManager : MonoBehaviour
 
     public int GetCurrentFoundPiecesCount()
     {
+        if (latestSaveData == null)
+            return 0;
+        if (latestSaveData.PieceFoundData == null)
+            return 0;
+
         return latestSaveData.PieceFoundData.PiecesFound.Count;
     }    
     
