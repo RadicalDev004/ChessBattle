@@ -44,8 +44,8 @@ public class SaveManager : MonoBehaviour
         sv.Coins = ShopManager.Coins;
         sv.Position = player.transform.position;
         sv.PieceFoundData = player.pieceFoundData;
-        sv.HouseIndex = GameRef.HouseManager.GetCurentHouseIndex();
 
+        sv.HouseIndex = GameRef.HouseManager.GetCurentHouseIndex();
         sv.QuestData = GameRef.QuestManager.GetQuestsData();
 
         string json = JsonConvert.SerializeObject(sv, Formatting.Indented);

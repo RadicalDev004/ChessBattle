@@ -11,7 +11,7 @@ public class StoryManager : MonoBehaviour
     public List<Trainer> Trainers;
     public List<Gate> Gates;
 
-    private void Awake()
+    private void Start()
     {
         Trainers = new(FindObjectsOfType<Trainer>().OrderBy(t => t.Zone));
         Gates = new(FindObjectsOfType<Gate>().OrderBy(g => g.Index));
@@ -20,7 +20,8 @@ public class StoryManager : MonoBehaviour
 
         for (int i = 0; i < ZoneCount; i++)
         {
-            int trainersDefeatedInZone = Trainers.Where(t => t.Defeated && t.Zone == i).Count();
+            int trainersDefeatedInZone = Trainers.Count(t => t.Defeated && t.Zone == i);
+            print(i + " " + trainersDefeatedInZone);
             if (trainersDefeatedInZone >= TrainersPerZone)
             {
                 var gate = Gates.Where(g => g.Index == i).First();

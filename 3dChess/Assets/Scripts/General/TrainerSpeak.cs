@@ -30,7 +30,7 @@ public class TrainerSpeak : MonoBehaviour
         this.OnBattle = OnBattle;
 
         T_TrainerName.text = trainer.Name;
-        T_Dialogue.text = trainer.Defeated ? trainer.DefeatedText : trainer.ChallengeText;
+        StartCoroutine(ShowText(T_Dialogue, trainer.Defeated ? trainer.DefeatedText : trainer.ChallengeText, 0.02f));
         SetupIcon();
 
         B_Flee.gameObject.SetActive(optional);
@@ -88,5 +88,15 @@ public class TrainerSpeak : MonoBehaviour
             return false;
         }
         return true;
+    }
+
+    private IEnumerator ShowText(TMP_Text text, string fullText, float delay)
+    {
+        text.text = "";
+        foreach (char c in fullText)
+        {
+            text.text += c;
+            yield return new WaitForSeconds(delay);
+        }
     }
 }

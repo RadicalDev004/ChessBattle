@@ -69,6 +69,7 @@ public class House : MonoBehaviour
         this.ActionAfterTime(0.5f, () =>
         {
             IsInside = true;
+            GameRef.PlayerBehaviour.SaveManager.SaveGame();
         });
         
     }
