@@ -63,6 +63,10 @@ public class PlayerBehaviour : MonoBehaviour
         GameRef.UI.ToggleEnterHouse(HouseInRange != null);
         if(HouseInRange != null && Input.GetKeyDown(KeyCode.E) && !Movement.IsPaused)
         {
+            var current = GameRef.HouseManager.GetCurrentHouse();
+            if(current != null) {
+                current.IsInside = false;
+            }
             HouseInRange.EnterHouse();
         }
     }

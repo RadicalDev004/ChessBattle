@@ -28,4 +28,19 @@ public class HouseManager : MonoBehaviour
     {
         return Houses[index]; 
     }
+
+    public House GetCurrentHouse()
+    {
+        var index = GetCurentHouseIndex();
+        if (index == -1)
+        {
+            return null;
+        }
+        return Houses[index];
+    }
+
+    public Hotel GetHotelByFloor(int floor)
+    {
+        return Houses.OfType<Hotel>().FirstOrDefault(h => h.Floor == floor);
+    }
 }

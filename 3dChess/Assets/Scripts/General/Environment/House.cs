@@ -37,16 +37,21 @@ public class House : MonoBehaviour
 
             if (closeToExit && Input.GetKey(KeyCode.E))
             {
-                IsInside = false;
-                InsideAnyHouse = false;
-                GameRef.PlayerBehaviour.TeleportTo(PlayerBeforeEnter);
-                GameRef.UI.ToggleExitHouse(false);
+                ExitHouse();
             }
             
         }
     }
 
-    public void EnterHouse(bool teleport = true)
+    public virtual void ExitHouse()
+    {
+        IsInside = false;
+        InsideAnyHouse = false;
+        GameRef.PlayerBehaviour.TeleportTo(PlayerBeforeEnter);
+        GameRef.UI.ToggleExitHouse(false);
+    }
+
+    public virtual void EnterHouse(bool teleport = true, House previous = null)
     {
         if(TeleportTo == null)
         {
