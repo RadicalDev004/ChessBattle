@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements.Experimental;
@@ -15,6 +16,7 @@ public class PlayerBehaviour : MonoBehaviour
     public SaveManager SaveManager;
     public Camera Camera;
     public PieceFoundData pieceFoundData;
+    private Movement Movement;
 
     public List<EntityData> PiecesInventory = new();
     public List<PotionData> PotionInventory = new();
@@ -33,8 +35,12 @@ public class PlayerBehaviour : MonoBehaviour
     private Vector3 InitialCameraPos;
     private Quaternion InitialCameraRotation;
 
+    public Transform InSkiChair;
+    public bool IsInSkiChair = false;
+
     private void Start()
     {
+        Movement = GetComponent<Movement>();
         InitialCameraPos = Camera.transform.localPosition;
         InitialCameraRotation = Camera.transform.rotation;
     }
@@ -42,6 +48,19 @@ public class PlayerBehaviour : MonoBehaviour
 
     private void Update()
     {
+        if (IsInSkiChair && Input.GetKeyDown(KeyCode.Escape))
+        {
+            transform.localPosition = transform.localPosition + new Vector3(0, 0.5f, 0);            
+            GameRef.UI.ShowSkiChairExitPrompt(false);
+            IsInSkiChair = false;
+            transform.SetParent(null);
+            transform.localRotation = Quaternion.identity;
+            transform.GetChild(0).localRotation = Quaternion.identity;
+
+            Movement.IsPaused = false;
+            Movement.StandUp();
+            GetComponent<CharacterController>().enabled = true;
+        }
         if (Input.GetKeyDown(KeyCode.T) && !Movement.IsPaused)
         {
             SaveManager.SaveGame();
@@ -106,6 +125,20 @@ public class PlayerBehaviour : MonoBehaviour
         {
             GameRef.UI.ActivateTab(GameRef.UI.Tab_Quests);
             GameRef.QuestManager.RefreshQuestData();
+        }
+
+        if (other.CompareTag("ski_chair") && !IsInSkiChair)
+        {
+            IsInSkiChair = true;
+            Movement.IsPaused = true;
+            Movement.Sit();
+            GetComponent<CharacterController>().enabled = false;
+
+            transform.SetParent(other.transform);
+            transform.SetLocalPositionAndRotation(InSkiChair.localPosition, InSkiChair.localRotation);
+            transform.GetChild(0).localRotation = InSkiChair.GetChild(0).localRotation;
+
+            GameRef.UI.ShowSkiChairExitPrompt(true);
         }
     }
 

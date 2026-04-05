@@ -51,6 +51,19 @@ public class Movement : MonoBehaviour
         PlayerInput.Disable();
     }
 
+    public void Sit()
+    {
+        print("AAAAAAA");
+        Moving = false;
+        Animator.SetBool("moving", false);
+        Animator.SetBool("sitting", true);
+    }
+
+    public void StandUp()
+    {
+        Animator.SetBool("sitting", false);
+    }
+
     void Update()
     {
         if (IsPaused)

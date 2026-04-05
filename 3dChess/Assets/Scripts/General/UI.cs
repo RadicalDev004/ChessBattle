@@ -7,9 +7,14 @@ public class UI : MonoBehaviour
 {
     public GameObject B_BattleTrainer;
     public GameObject B_EnterHouse, B_ExitHouse;
-    public GameObject B_SeachItem;
+    public GameObject B_SeachItem, B_ExitSki;
 
     public CanvasGroup Tab_Shop, Tab_Quests, Tab_Hospital;
+
+    public void ShowSkiChairExitPrompt(bool state)
+    {
+        B_ExitSki.SetActive(state);
+    }
 
     public void ToggleEnterHouse(bool toggle)
     {
