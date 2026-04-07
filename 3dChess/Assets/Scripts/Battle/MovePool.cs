@@ -201,6 +201,7 @@ new Move("Miasma Veil",       "A dense, toxic shroud that relentlessly drains.",
         }
         if (!movesForVariant[index].Variants.Contains(variant))
         {
+            Debug.LogWarning($"Requested move {movesForVariant[index].Name} at index {index} does not match variant '{variant}'. Returning null.");
             return null;
         }
         return movesForVariant[index];

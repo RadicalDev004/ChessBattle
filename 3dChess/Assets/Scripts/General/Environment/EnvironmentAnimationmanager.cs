@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnvironmentAnimationmanager : MonoBehaviour
+public class EnvironmentAnimationManager : MonoBehaviour
 {
     public GameObject Fire;
 

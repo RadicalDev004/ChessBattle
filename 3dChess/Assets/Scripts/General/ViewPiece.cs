@@ -1,3 +1,4 @@
+using Pixelplacement;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -39,6 +40,12 @@ public class ViewPiece : MonoBehaviour
 
     [Header("Other")]
     public Button B_Release;
+    public GameObject Curtains;
+    private Vector3 InitCurtainsPos;
+    private void Start()
+    {
+        InitCurtainsPos = Curtains.transform.localPosition;
+    }
 
     private void FixedUpdate()
     {
@@ -53,7 +60,10 @@ public class ViewPiece : MonoBehaviour
     public void SetDirection(int dir) => Direction = dir;
 
     public void OpenViewPiece(EntityData e)
-    {        
+    {
+        Curtains.transform.localPosition = InitCurtainsPos;
+        Tween.LocalPosition(Curtains.transform, new Vector3(-0.1f, -0.5f, 1), 0.5f, 0, Tween.EaseInOut);
+
         Movement.IsPaused = true;
         thisEntity = e;
         GetIcon();
@@ -95,7 +105,7 @@ public class ViewPiece : MonoBehaviour
 
         S_Health.maxValue = e.MaxHealth;
         S_Health.value = e.Health;
-        S_Health.fillRect.GetComponent<Image>().color = S_Health.value == 0 ? Color.red : Color.green;
+        S_Health.fillRect.GetComponent<Image>().color = S_Health.value == 0 ? Color.red : S_Health.fillRect.GetComponent<Image>().color;
 
         var expBounds = e.GetExpTresholdBounds();
         S_Exp.minValue = expBounds.Item1;

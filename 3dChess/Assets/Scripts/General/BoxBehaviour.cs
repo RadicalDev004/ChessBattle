@@ -47,6 +47,8 @@ public class BoxBehaviour : MonoBehaviour
     }
     public void OpenBox()
     {
+        GameRef.PlayerBehaviour.SaveManager.IncreaseBoxesOpened();
+
         Before.Stop();
         After.Play();
         IsReady = false;

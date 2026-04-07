@@ -4,9 +4,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class ChessManager : MonoBehaviour
 {
@@ -25,6 +27,9 @@ public class ChessManager : MonoBehaviour
     public static bool Local = true;
 
     public static bool Side = true;
+
+    public TMP_Text T_OppName;
+    public Image I_Avatar;
 
     [Header("Debug")]
     public bool debLocal;
@@ -71,6 +76,15 @@ public class ChessManager : MonoBehaviour
     }
     public void PreparePieces(InventoryData white, InventoryData black)
     {
+        var oppName = Side ? black.Name : white.Name;
+        T_OppName.text = oppName;
+        var trainerSprite = Resources.Load<Sprite>($"Icons/Trainers/{oppName}");
+        if (trainerSprite != null)
+        {
+            I_Avatar.sprite = trainerSprite;
+            I_Avatar.Fit(100);
+        }     
+
         WhiteData = white;
         BlackData = black;
 
@@ -127,16 +141,19 @@ public class ChessManager : MonoBehaviour
         if (Local)
             saveData.TrainerData.Find(t => t.Name == OpponentName).Defeated = winner;
 
-        string json = JsonConvert.SerializeObject(saveData, Formatting.Indented);
-        PlayerPrefs.SetString("save" + PlayerPrefs.GetString("currentSave"), json);
         if (winner == Side)
         {
+            saveData.TelemetryData.Wins++;
             ChessUI.WinUI();
         }
         else
         {
+            saveData.TelemetryData.Losses++;
             ChessUI.LoseUI();
         }
+
+        string json = JsonConvert.SerializeObject(saveData, Formatting.Indented);
+        PlayerPrefs.SetString("save" + PlayerPrefs.GetString("currentSave"), json);
     }
 
     public void PrepareLocalMatch()
@@ -144,7 +161,8 @@ public class ChessManager : MonoBehaviour
         string white = PlayerPrefs.GetString("save" + PlayerPrefs.GetString("currentSave"));
         print("deserializing white data:\n" + white);
         string black = PlayerPrefs.GetString("trainer");
-        OpponentName = PlayerPrefs.GetString("trainerName");
+
+        
 
         SaveData whiteData = JsonConvert.DeserializeObject<SaveData>(white);
         saveData = whiteData;
@@ -162,7 +180,6 @@ public class ChessManager : MonoBehaviour
     public string GetMyInventoryData()
     {
         string white = PlayerPrefs.GetString("save" + PlayerPrefs.GetString("currentSave"));
-        string black = PlayerPrefs.GetString("trainer");
 
         SaveData whiteData = JsonConvert.DeserializeObject<SaveData>(white);
         saveData = whiteData;

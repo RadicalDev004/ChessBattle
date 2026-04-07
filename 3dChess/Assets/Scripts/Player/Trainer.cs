@@ -9,6 +9,8 @@ public class Trainer : MonoBehaviour
 {
     public string Name;
     public int Zone;
+    [TextArea(15, 15)]
+    public string JsonInventory;
     public List<TrainerPieceInfo> Pieces;
     public List<TrainerPotionInfo> Potions;
     [TextArea(10, 10)]
@@ -23,6 +25,13 @@ public class Trainer : MonoBehaviour
     {
         NpcInfo.Create(false);
         InitialRotation = transform.rotation;
+
+        var data = JsonUtility.FromJson<TrainerInventory>(JsonInventory);
+        if (data != null)
+        {
+            Pieces = data.Pieces;
+            Potions = data.Potions;
+        }  
     }
 
 
@@ -54,6 +63,7 @@ public class Trainer : MonoBehaviour
 
         return new InventoryData()
         {
+            Name = Name,
             Pieces = new(Pieces.Select((pieceInfo) => {
                 var p = Variants.GetPieceByIndex(pieceInfo.PieceIndex);
                 p.Moves = pieceInfo.MoveIndexes.Select(i => MovePool.GetMoveByIndex(p.Variant, i)).ToList();
@@ -84,4 +94,11 @@ public struct TrainerPotionInfo
 {
     public int PotionIndex;
     public int Position;
+}
+
+[Serializable]
+public class TrainerInventory
+{
+    public List<TrainerPieceInfo> Pieces;
+    public List<TrainerPotionInfo> Potions;
 }

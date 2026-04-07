@@ -8,6 +8,8 @@ public class StoryManager : MonoBehaviour
     public int TrainersPerZone = 5;
     public int ZoneCount = 4;
 
+    public int CurrentZone = 0;
+
     public List<Trainer> Trainers;
     public List<Gate> Gates;
 
@@ -29,6 +31,9 @@ public class StoryManager : MonoBehaviour
                 completedZones++;
             }
         }
+        CurrentZone = completedZones;
+
+        print("Current zone: " + CurrentZone);
     }
 
     public int GetTrainersDefeatedbyZone(int zone)

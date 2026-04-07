@@ -9,6 +9,25 @@ public class SaveManager : MonoBehaviour
     public PlayerBehaviour player;
     public bool isSaving = false;
     public SaveData latestSaveData;
+    public TelemetryData telemetryData;
+    public string PlayerName = string.Empty;
+
+    public int GetLossesToWinsBalance()
+    {
+        if(latestSaveData == null || latestSaveData.TelemetryData == null)
+            return 0;
+        return latestSaveData.TelemetryData.Losses - latestSaveData.TelemetryData.Wins;
+    }
+
+    public void IncreaseBoxesOpened()
+    {
+        telemetryData.BoxesOpened++;
+    }
+
+    public void SetName(string name)
+    {
+        PlayerName = name;
+    }
 
     public int GetCurrentFoundPiecesCount()
     {
@@ -38,12 +57,14 @@ public class SaveManager : MonoBehaviour
         sv.TrainerData = allTrainers.ConvertAll(t => new TrainerData(t));
         sv.InventoryData = new InventoryData() 
         { 
+            Name = PlayerName,
             Pieces = player.PiecesInventory, 
             Potions = player.PotionInventory 
         };
         sv.Coins = ShopManager.Coins;
         sv.Position = player.transform.position;
         sv.PieceFoundData = player.pieceFoundData;
+        sv.TelemetryData = telemetryData;
 
         sv.HouseIndex = GameRef.HouseManager.GetCurentHouseIndex();
         sv.QuestData = GameRef.QuestManager.GetQuestsData();
@@ -86,10 +107,12 @@ public class SaveManager : MonoBehaviour
         ShopManager.Coins = sv?.Coins ?? 0;
         GameRef.QuestManager.SetQuestsData(sv?.QuestData ?? new());
 
+        telemetryData = sv?.TelemetryData ?? new TelemetryData();
+
         player.PiecesInventory = sv == null ? new() : sv.InventoryData.Pieces;
         player.PotionInventory = sv == null ? new() : sv.InventoryData.Potions;
         player.PiecesInventory ??= new();
-        player.pieceFoundData ??= new();      
+        player.pieceFoundData ??= new();    
     }
 
     private void OnApplicationQuit()
