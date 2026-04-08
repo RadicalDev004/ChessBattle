@@ -4,11 +4,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class BoxBehaviour : MonoBehaviour
 {
     public List<GameObject> Pieces = new();
     public GameObject CurrentPiece;
+    public GameObject Background;
     public GameObject Box;
     public GetPiece GetPiece;
     public Vector3 Hidden, Shown;
@@ -34,6 +36,7 @@ public class BoxBehaviour : MonoBehaviour
 
     public void PrepareBox()
     {
+        Background.SetActive(true);
         Basic.SetActive(false);
         Before.Play();
         Movement.IsPaused = true;
@@ -74,6 +77,7 @@ public class BoxBehaviour : MonoBehaviour
 
     public void Close()
     {
+        Background.SetActive(false);
         After.Stop();
         Movement.IsPaused = false;
         Destroy(CurrentPiece);

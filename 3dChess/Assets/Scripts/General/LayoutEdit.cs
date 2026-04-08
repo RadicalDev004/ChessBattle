@@ -101,6 +101,11 @@ public class LayoutEdit : MonoBehaviour
         FinishedSetup = true;
     }
 
+    public void RefreshPieceGraphics()
+    {
+        PieceGraphics.ClearObjects();
+        PlacePieces();
+    }
     public void RefreshListPiecesUI(int sortMethod = -1)
     {
         if (sortMethod == -1)

@@ -35,7 +35,7 @@ public class ReleaseTab : MonoBehaviour
         B_Release.onClick.AddListener(() =>
         {
             canvasGroup.Deactivate();
-            PlayerPrefs.SetInt("coins", PlayerPrefs.GetInt("coins") + amount);
+            ShopManager.Coins += amount;
             GameRef.PlayerBehaviour.ReleasePiece(p);
             OnRelease?.Invoke();
             GameRef.PlayerBehaviour.SaveManager.SaveGame();

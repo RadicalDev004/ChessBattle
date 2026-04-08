@@ -131,6 +131,7 @@ public class ViewPiece : MonoBehaviour
             GameRef.ReleaseTab.Create(thisEntity, () =>
             {
                 CloseViewPiece();
+                GameRef.LayoutEdit.RefreshPieceGraphics();
                 GameRef.LayoutEdit.RefreshListPiecesUI();
                 GameRef.HospitalEdit.RefreshListPiecesUI();
             });
