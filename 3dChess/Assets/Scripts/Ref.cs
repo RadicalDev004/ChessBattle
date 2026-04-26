@@ -53,6 +53,11 @@ public class Ref : MonoBehaviour
     public OpponentMoveGraphic opponentMoveGraphic;
     public static OpponentMoveGraphic OpponentMoveGraphic { get { return Instance.opponentMoveGraphic; } }
 
+    public Timer timerOpp;
+    public static Timer TimerOpp { get { return Instance.timerOpp; } }
+
+    public Timer timerMy;
+    public static Timer TimerMy { get { return Instance.timerMy; } }
 
     private void Awake()
     {

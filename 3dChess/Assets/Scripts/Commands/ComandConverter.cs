@@ -14,6 +14,10 @@ public sealed class CommandConverter : JsonConverter<CommandBase>
             { CommandType.BattleSwitchPiece, () => new SwitchPieceCommand() },
             { CommandType.BattleUsePotion,   () => new UsePotionCommand() },
             { CommandType.BattleFlee,        () => new FleeBattleCommand() },
+            { CommandType.LeaveGame,         () => new LeaveCommand() },
+            { CommandType.StartMatch,        () => new StartMatchCommand() },
+            { CommandType.StartBattle, () => new StartBattleCommand() },
+            { CommandType.EndBattle, () => new EndBattleCommand() },
 
             // Add the rest when you implement them:
             // { CommandType.StartBattle,     () => new StartBattleCommand() },

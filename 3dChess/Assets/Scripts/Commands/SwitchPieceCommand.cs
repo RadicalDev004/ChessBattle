@@ -19,6 +19,7 @@ public class SwitchPieceCommand : CommandBase
 
     public override void Execute()
     {
+        ManageTimersBefore();
         Ref.BattleManager.SwitchPiece(Side, OriginalPieceInd, NewPieceInd);
     }
 }

@@ -28,8 +28,10 @@ public class ChessManager : MonoBehaviour
 
     public static bool Side = true;
 
-    public TMP_Text T_OppName;
+    public TMP_Text T_OppName, T_MyName;
     public Image I_Avatar;
+
+    public GameObject MyInfo;
 
     [Header("Debug")]
     public bool debLocal;
@@ -39,7 +41,8 @@ public class ChessManager : MonoBehaviour
 
     private void Start()
     {
-        if(Local)
+        MyInfo.SetActive(false);
+        if (Local)
         {
             PrepareLocalMatch();
             PreparePieces(WhiteData, BlackData);
@@ -58,6 +61,7 @@ public class ChessManager : MonoBehaviour
     //Match preparation
     public void PreparePieces(string incoming, bool side)
     {
+        MyInfo.SetActive(true);
         print("Starting chess match with side:\n" + side);
         string mine = GetMyInventoryData();
         Side = side;
@@ -72,12 +76,27 @@ public class ChessManager : MonoBehaviour
             PreparePieces(JsonConvert.DeserializeObject<InventoryData>(mine), JsonConvert.DeserializeObject<InventoryData>(incoming));
         }
 
-        
+        if(Side)
+        {
+            Ref.TimerMy.Create(60, () => { });
+        }
+        else
+        {
+            Ref.TimerOpp.Create(60, () => { });
+        }
     }
+
+    public Timer GetTimer(bool side)
+    {
+        return side == Side ? Ref.TimerMy : Ref.TimerOpp;
+    }
+
     public void PreparePieces(InventoryData white, InventoryData black)
     {
         var oppName = Side ? black.Name : white.Name;
         T_OppName.text = oppName;
+        T_MyName.text = Side ? white.Name : black.Name;
+
         var trainerSprite = Resources.Load<Sprite>($"Icons/Trainers/{oppName}");
         if (trainerSprite != null)
         {
@@ -162,8 +181,6 @@ public class ChessManager : MonoBehaviour
         print("deserializing white data:\n" + white);
         string black = PlayerPrefs.GetString("trainer");
 
-        
-
         SaveData whiteData = JsonConvert.DeserializeObject<SaveData>(white);
         saveData = whiteData;
 
@@ -172,6 +189,7 @@ public class ChessManager : MonoBehaviour
         whiteInventory.Potions = whiteInventory.Potions.Where(p => p.Position > -1).ToList();
 
         InventoryData blackInventory = JsonConvert.DeserializeObject<InventoryData>(black);
+        OpponentName = blackInventory.Name;
 
         WhiteData = whiteInventory;
         BlackData = blackInventory;
@@ -189,12 +207,23 @@ public class ChessManager : MonoBehaviour
         return JsonConvert.SerializeObject(whiteInventory);
     }
 
-    
+    public void GiveUp()
+    {
+        if (Local)
+        { 
+            EndMatch(false);
+            return; 
+        }
+
+        Ref.CommandManager.AddCommandLocal(new LeaveCommand(Side));
+    }
 
 
     //Match logic
     public void MovePiece(bool side, int pieceInd, int tileInd)
     {
+        GetTimer(side).Stop();
+
         var piece = side ? WhitePieces[pieceInd] : BlackPieces[pieceInd];
         var tile = Ref.ManageTiles.GetTile(tileInd);
         MovePiece(side, piece, tile);
@@ -204,6 +233,14 @@ public class ChessManager : MonoBehaviour
         if (tile.currentPiece != null)
         {
             BattleManager.Ongoing = true;
+
+            if(side == Side)
+            { 
+                this.ActionAfterTime(0.5f, () => { 
+                    Ref.CommandManager.AddCommandLocal(new StartBattleCommand(side)); 
+                });      
+            }
+
             Ref.VersusUI.Create(piece, tile.currentPiece, () =>
             {
                 Ref.BattleManager.StartBattle(piece, tile.currentPiece, tile, side);

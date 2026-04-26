@@ -2,7 +2,6 @@ using Pixelplacement;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor.Search;
 using UnityEngine;
 
 public class ShopManager : MonoBehaviour

@@ -8,8 +8,10 @@ using UnityEngine;
 
 public class BattleManager : MonoBehaviour
 {
+    public GameObject BasicUI;
     private readonly static WaitForSeconds _waitForSeconds1 = new(1);
     private readonly static WaitForSeconds _waitForSeconds0_5 = new(0.5f);
+    public bool SideStarting;
 
     public EffectManager EffectManager;
     public Piece Original1, Original2;
@@ -56,12 +58,20 @@ public class BattleManager : MonoBehaviour
         Fleed = 2,
     }
 
-    public void StartBattle(Piece attacker, Piece defender, Tile t, bool start)
+    public Timer GetTimer(bool side)
     {
+        return Ref.ChessManager.GetTimer(side);
+    }
+
+    public void StartBattle(Piece attacker, Piece defender, Tile t, bool sideStarting)
+    {
+        SideStarting = sideStarting;
+
+        BasicUI.SetActive(false);
         Turn = attacker.side ? 0 : 1;
 
         Ref.AI.CreateBattle();  
-        Debug.LogError("Starting battle between " + attacker.name + " and " + defender.name + " at tile " + t.x + "," + t.y + " at side " + start);
+        Debug.LogError("Starting battle between " + attacker.name + " and " + defender.name + " at tile " + t.x + "," + t.y + " at side " + sideStarting);
         
         Original1 = attacker;
         Original2 = defender;
@@ -105,6 +115,8 @@ public class BattleManager : MonoBehaviour
 
     public void EndBattle()
     {
+        Ref.CommandManager.AddCommandLocal(new EndBattleCommand(SideStarting));
+
         Ongoing = false;
         Ref.BattleUI.gameObject.SetActive(false);
 
@@ -127,6 +139,7 @@ public class BattleManager : MonoBehaviour
         EffectManager.ClearAll();
 
         ChessManager.IncreaseTurn();
+        BasicUI.SetActive(true);
     }
 
     public GameObject CreateNewShowPiece(GameObject p, Transform pos)

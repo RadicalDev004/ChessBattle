@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class LoadingScreen : MonoBehaviour
@@ -12,7 +14,10 @@ public class LoadingScreen : MonoBehaviour
 
     private void Awake()
     {
-        B_Cancel.onClick.AddListener(Cancel);
+        B_Cancel.onClick.RemoveAllListeners();
+        B_Cancel.onClick.AddListener(async () => {
+            await Cancel();
+        });
     }
 
     public void SetInfo(string info)
@@ -30,8 +35,18 @@ public class LoadingScreen : MonoBehaviour
         B_Cancel.gameObject.SetActive(false);
     }
 
-    public void Cancel()
+    public async Task Cancel()
     {
-        
+        SetInfo("Cancelling...");
+        HideCancel();
+
+        if (await Ref.OnlineManager.CancelMatch())
+        { 
+            SceneManager.LoadScene("Game"); 
+        }
+        else
+        {
+            SetInfo("Failed Cancel");
+        }
     }
 }

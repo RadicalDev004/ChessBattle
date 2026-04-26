@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class OnlineManager : MonoBehaviour
@@ -157,7 +158,6 @@ public class OnlineManager : MonoBehaviour
             FirebaseDatabase.DefaultInstance.GetReference("matches").Child(MatchId.ToString()).Child("state").ValueChanged -= ManageStateChangedFromGuest;
 
             Ref.ChessManager.PreparePieces(hostPieces.GetValue<string>(), false);
-            Ref.LoadingScreen.Toggle(false);
 
             FirebaseDatabase.DefaultInstance.GetReference("matches").Child(MatchId.ToString()).Child("moves").ChildAdded += ReceiveCommand;
         }
@@ -174,11 +174,12 @@ public class OnlineManager : MonoBehaviour
         await FirebaseDatabase.DefaultInstance.GetReference("matches").Child(MatchId.ToString()).Child("state").SetValueAsync(2);
 
         Ref.ChessManager.PreparePieces(dataSnapshot.GetValue<string>(), true);
-        Ref.LoadingScreen.Toggle(false);
 
         FirebaseDatabase.DefaultInstance.GetReference("matches").Child(MatchId.ToString()).Child("moves").ChildAdded += ReceiveCommand;
 
         Debug.Log($"[OnlineManager] Guest sent inventory: {dataSnapshot}");
+
+        Ref.CommandManager.AddCommandLocal(new StartMatchCommand(true));
     }
 
     public async void EnterAsGuest()
@@ -187,5 +188,17 @@ public class OnlineManager : MonoBehaviour
         await FirebaseDatabase.DefaultInstance.GetReference("matches").Child(MatchId.ToString()).Child("guest").Child("id").SetValueAsync(MyId.ToString());
         await FirebaseDatabase.DefaultInstance.GetReference("matches").Child(MatchId.ToString()).Child("guest").Child("pieces").SetValueAsync(Ref.ChessManager.GetMyInventoryData());
         Ref.LoadingScreen.SetInfo("Joining match...");
+    }
+
+    public async Task<bool> CancelMatch()
+    {
+        if (Accepted)
+            return false;
+
+        if(MatchId != Guid.Empty)
+        {
+            await FirebaseDatabase.DefaultInstance.GetReference("matches").Child(MatchId.ToString()).RemoveValueAsync();
+        }
+        return true;
     }
 }

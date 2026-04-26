@@ -17,6 +17,7 @@ public class UsePotionCommand : CommandBase
 
     public override void Execute()
     {
+        ManageTimersBefore();
         Ref.BattleManager.ProcessPotion(Side, PieceInd, PotionInd);
     }
 }

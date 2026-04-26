@@ -23,5 +23,6 @@ public class MoveCommand : CommandBase
     public override void Execute()
     {
         Ref.ChessManager.MovePiece(Side, PieceInd, TileInd);
+        ManageTimersBefore();
     }
 }

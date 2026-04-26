@@ -23,6 +23,7 @@ public class UseMoveCommand : CommandBase
 
     public override void Execute()
     {
+        ManageTimersBefore();
         Ref.BattleManager.ProcessMove(Side, PieceInd, MoveInd, new Rng32(Seed));
     }
 }
