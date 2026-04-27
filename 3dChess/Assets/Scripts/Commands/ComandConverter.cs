@@ -16,12 +16,9 @@ public sealed class CommandConverter : JsonConverter<CommandBase>
             { CommandType.BattleFlee,        () => new FleeBattleCommand() },
             { CommandType.LeaveGame,         () => new LeaveCommand() },
             { CommandType.StartMatch,        () => new StartMatchCommand() },
-            { CommandType.StartBattle, () => new StartBattleCommand() },
-            { CommandType.EndBattle, () => new EndBattleCommand() },
-
-            // Add the rest when you implement them:
-            // { CommandType.StartBattle,     () => new StartBattleCommand() },
-            // { CommandType.BattleEnd,       () => new EndBattleCommand() },
+            { CommandType.StartBattle,       () => new StartBattleCommand() },
+            { CommandType.EndBattle,         () => new EndBattleCommand() },
+            { CommandType.Timeout,           () => new TimeoutCommand() },
         };
 
     public override CommandBase ReadJson(

@@ -28,6 +28,8 @@ public class ChessManager : MonoBehaviour
 
     public static bool Side = true;
 
+    public static bool Ended = false;
+
     public TMP_Text T_OppName, T_MyName;
     public Image I_Avatar;
 
@@ -41,6 +43,7 @@ public class ChessManager : MonoBehaviour
 
     private void Start()
     {
+        Ended = false;
         MyInfo.SetActive(false);
         if (Local)
         {
@@ -155,6 +158,7 @@ public class ChessManager : MonoBehaviour
 
     public void EndMatch(bool winner)
     {
+        Ended = true;
         saveData.InventoryData.Pieces = AllWhites;
         saveData.InventoryData.Potions = WhiteData.Potions;
         if (Local)

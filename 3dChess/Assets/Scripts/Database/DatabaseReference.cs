@@ -31,6 +31,24 @@ public sealed class DatabaseReference
         return Child(id);
     }
 
+    public async Task<string> PushValueAsync(object value)
+    {
+        var json = JsonConvert.SerializeObject(value);
+        var url = _db.BuildUrl(Path);
+
+        var (code, body) = await HttpHelper.SendAsync("POST", url, json);
+
+        if (code < 200 || code >= 300)
+            throw new Exception($"Firebase POST failed: {code} {body}");
+
+        var result = JsonConvert.DeserializeObject<Dictionary<string, string>>(body);
+
+        if (result == null || !result.TryGetValue("name", out var key))
+            throw new Exception($"Firebase POST returned invalid body: {body}");
+
+        return key;
+    }
+
     public async Task<DataSnapshot> GetValueAsync()
     {
         var url = _db.BuildUrl(Path);

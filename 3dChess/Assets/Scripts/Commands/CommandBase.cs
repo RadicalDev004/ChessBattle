@@ -72,4 +72,5 @@ public enum CommandType
     StartBattle,
     EndBattle,
     LeaveGame,
+    Timeout,
 }

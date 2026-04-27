@@ -115,7 +115,7 @@ public class Movement : MonoBehaviour
         {
             Moving = false;
             Animator.SetBool("moving", false);
-            WaitForSadIdle = StartCoroutine(Helper.ActionAfterTimeCor(SadIdleTimeout, () => { Animator.SetTrigger("sad"); }));
+            //WaitForSadIdle = StartCoroutine(Helper.ActionAfterTimeCor(SadIdleTimeout, () => { Animator.SetTrigger("sad"); }));
         }
 
         if(Moving)

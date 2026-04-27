@@ -20,6 +20,9 @@ public class CommandManager : MonoBehaviour
 
     public void AddCommandLocal(CommandBase command)
     {
+        if (ChessManager.Ended)
+            return;
+
         commands.Add(command);
         var serializedCommand = JsonConvert.SerializeObject(command, settings);
         serializedCommands.Add(serializedCommand);
@@ -33,6 +36,9 @@ public class CommandManager : MonoBehaviour
 
     public void AddCommandExternal(string serializedCommand)
     {
+        if (ChessManager.Ended)
+            return;
+
         var command = JsonConvert.DeserializeObject<CommandBase>(serializedCommand, settings);
         commands.Add(command);
         serializedCommands.Add(serializedCommand);

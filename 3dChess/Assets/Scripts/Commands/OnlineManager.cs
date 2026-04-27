@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class OnlineManager : MonoBehaviour
 {
@@ -14,27 +15,50 @@ public class OnlineManager : MonoBehaviour
     private void Awake()
     {
         bool flag = PlayerPrefsExtentions.GetBool("online");
+        int privateMatch = PlayerPrefs.GetInt("private");
+
         ChessManager.Local = !flag;
 
         if(flag)
         {
             MyId = Guid.NewGuid();
-            Ref.LoadingScreen.Toggle(true);
-            LookForRoom();
+
+            if (privateMatch == 0)
+            {
+                Ref.LoadingScreen.Toggle(true);
+                LookForRoom();
+            }
+            else if (privateMatch == 1)
+            {
+                CreatePrivateRoom();
+            }
+            else if (privateMatch == 2)
+            {
+                JoinPrivateRoom(PlayerPrefs.GetString("privateCode"));
+            }
         }
+    }
+
+    private void OnApplicationQuit()
+    {
+        Ref.CommandManager.AddCommandLocal(new LeaveCommand(ChessManager.Side));
     }
 
     public async void SendCommand(string command)
     {
         Debug.Log("[OnlineManager] Sending command: " + command);
-        var key = DateTime.UtcNow.ToString("yyyy-MM-ddTHH-mm-ss");
-        await FirebaseDatabase.DefaultInstance.GetReference("matches").Child(MatchId.ToString()).Child("moves").Child(key).SetValueAsync(
-            new Dictionary<string, object>()
+
+        var key = await FirebaseDatabase.DefaultInstance
+            .GetReference("matches")
+            .Child(MatchId.ToString())
+            .Child("moves")
+            .PushValueAsync(new Dictionary<string, object>()
             {
-                { "id" , MyId.ToString() },
-                { "command", command }
+            { "id", MyId.ToString() },
+            { "command", command }
             });
-        Debug.Log("[OnlineManager] Command sent: " + command);
+
+        Debug.Log("[OnlineManager] Command sent with key: " + key);
     }
 
     public void ReceiveCommand(DataSnapshot dataSnapshot)
@@ -63,19 +87,14 @@ public class OnlineManager : MonoBehaviour
         foreach (var match in matches.Children)
         {
             var state = match.Child("state").GetValue<int>();
-            if (state == 0)
+            var privateMatch = match.Child("private").GetValue<int>() == 1;
+            if (state == 0 && !privateMatch)
             {
                 Debug.Log($"[OnlineManager] Found match: {match.Key}");
 
-                FirebaseDatabase.DefaultInstance.GetReference("matches").Child(match.Key).Child("room").ChildAdded += ManageAddedToState;
-
-                MatchId = Guid.Parse(match.Key);
-                OtherId = Guid.Parse(match.Child("host").Child("id").GetValue<string>());
-                Ref.LoadingScreen.SetInfo("Found match, trying to join...");
-
                 tryFound = true;
+                await TryJoinRoom(match);
 
-                await FirebaseDatabase.DefaultInstance.GetReference("matches").Child(match.Key).Child("room").Child("trying").SetValueAsync(MyId.ToString());
                 break;
             }
         }
@@ -86,7 +105,45 @@ public class OnlineManager : MonoBehaviour
         }
     }
 
-    async void CreateRoom()
+    async Task TryJoinRoom(DataSnapshot match)
+    {
+        FirebaseDatabase.DefaultInstance.GetReference("matches").Child(match.Key).Child("room").ChildAdded += ManageAddedToState;
+
+        MatchId = Guid.Parse(match.Key);
+        OtherId = Guid.Parse(match.Child("host").Child("id").GetValue<string>());
+        Ref.LoadingScreen.SetInfo("Found match, trying to join...");
+
+        await FirebaseDatabase.DefaultInstance.GetReference("matches").Child(match.Key).Child("room").Child("trying").SetValueAsync(MyId.ToString());
+    }
+
+    async void CreatePrivateRoom()
+    {
+        Ref.LoadingScreen.SetInfo("Creating private room...");
+        await CreateRoom();
+        await FirebaseDatabase.DefaultInstance.GetReference("matches").Child(MatchId.ToString()).Child("private").SetValueAsync(1);
+        Ref.LoadingScreen.SetInfo("Private room created, waiting for player...");
+        Ref.LoadingScreen.PrepareCode(MatchId.ToString());
+    }
+
+    public async void JoinPrivateRoom(string code)
+    {
+        Ref.LoadingScreen.SetInfo("Joining private room...");
+        var match = await FirebaseDatabase.DefaultInstance.GetReference("matches").Child(code).GetValueAsync();
+        if (match.Exists && match.Child("private").GetValue<int>() == 1)
+        {
+            Debug.Log($"[OnlineManager] Found private match: {match.Key}");
+            await TryJoinRoom(match);
+        }
+        else
+        {
+            Ref.LoadingScreen.SetInfo("Private match not found, going back...");
+            this.ActionAfterTime(2f, () => {
+                SceneManager.LoadScene("Game");
+            });
+        }
+    }
+
+    async Task CreateRoom()
     {
         Ref.LoadingScreen.SetInfo("Creating room...");
         var matchGuid = Guid.NewGuid().ToString();
