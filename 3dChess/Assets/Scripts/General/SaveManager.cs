@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SaveManager : MonoBehaviour
 {
@@ -27,6 +28,12 @@ public class SaveManager : MonoBehaviour
     public void SetName(string name)
     {
         PlayerName = name;
+    }
+
+    public void QuitGame()
+    {
+        SaveGame();
+        SceneManager.LoadScene("Menu");
     }
 
     public int GetCurrentFoundPiecesCount()
@@ -71,19 +78,19 @@ public class SaveManager : MonoBehaviour
 
         string json = JsonConvert.SerializeObject(sv, Formatting.Indented);
         print("Saving game \n" + json);
-        PlayerPrefs.SetString("save" + PlayerPrefs.GetString("currentSave"), json);
+        PlayerPrefs.SetString("save" + PlayerPrefs.GetInt("currentSave"), json);
         latestSaveData = sv;
 
         isSaving = false;
     }
     public SaveData GetData()
     {
-        return JsonConvert.DeserializeObject<SaveData>(PlayerPrefs.GetString("save" + PlayerPrefs.GetString("currentSave")));
+        return JsonConvert.DeserializeObject<SaveData>(PlayerPrefs.GetString("save" + PlayerPrefs.GetInt("currentSave")));
     }
     public void LoadGame()
     {
-        print("Loading game \n" + PlayerPrefs.GetString("save" + PlayerPrefs.GetString("currentSave")));
-        SaveData sv = JsonConvert.DeserializeObject<SaveData>(PlayerPrefs.GetString("save" + PlayerPrefs.GetString("currentSave")));
+        print($"Loading game [{PlayerPrefs.GetInt("currentSave")}\n" + PlayerPrefs.GetString("save" + PlayerPrefs.GetInt("currentSave")));
+        SaveData sv = JsonConvert.DeserializeObject<SaveData>(PlayerPrefs.GetString("save" + PlayerPrefs.GetInt("currentSave")));
         latestSaveData = sv;
         if (sv != null)
         {
