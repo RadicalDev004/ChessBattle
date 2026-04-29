@@ -13,8 +13,11 @@ public class FleeBattleCommand : CommandBase
 
     public override void Execute()
     {
-        Ref.TimerMy.Stop();
-        Ref.TimerOpp.Stop();
+        if (!ChessManager.Local)
+        {    
+            Ref.TimerMy.Stop();
+            Ref.TimerOpp.Stop();
+        }
 
         Ref.BattleManager.FleeBattle(Side);
     }

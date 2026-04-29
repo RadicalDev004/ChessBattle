@@ -89,7 +89,7 @@ public class SaveManager : MonoBehaviour
     }
     public void LoadGame()
     {
-        print($"Loading game [{PlayerPrefs.GetInt("currentSave")}\n" + PlayerPrefs.GetString("save" + PlayerPrefs.GetInt("currentSave")));
+        print($"Loading game [{PlayerPrefs.GetInt("currentSave")}]\n" + PlayerPrefs.GetString("save" + PlayerPrefs.GetInt("currentSave")));
         SaveData sv = JsonConvert.DeserializeObject<SaveData>(PlayerPrefs.GetString("save" + PlayerPrefs.GetInt("currentSave")));
         latestSaveData = sv;
         if (sv != null)

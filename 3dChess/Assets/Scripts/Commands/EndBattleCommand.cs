@@ -14,6 +14,10 @@ public class EndBattleCommand : CommandBase
     public override void Execute()
     {
         Ref.LoadingScreen.Toggle(false);
-        ManageTimersBefore();
+
+        if(!ChessManager.Local)
+        {
+            ManageTimersBefore();
+        }
     }
 }

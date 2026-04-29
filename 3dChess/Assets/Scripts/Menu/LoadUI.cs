@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -16,7 +17,9 @@ public class LoadUI : MonoBehaviour
         Index = ind;
         T_Name.text = PlayerPrefs.GetString($"save{ind}_name", "Unknown");
         T_LastPlayedAt.text = "Last played " + PlayerPrefs.GetString($"save{ind}_lastPlayedAt", "Unknown");
-        T_Trainers.text = $"Trainers: {0}/20";
+
+        SaveData data = JsonUtility.FromJson<SaveData>(PlayerPrefs.GetString($"save{ind}", ""));
+        T_Trainers.text = $"Trainers: {data.TrainerData.Count(td => td.Defeated)}/20";
 
         GetComponent<Button>().onClick.AddListener(() =>
         {

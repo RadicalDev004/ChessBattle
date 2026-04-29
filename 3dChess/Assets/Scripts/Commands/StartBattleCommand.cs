@@ -13,6 +13,9 @@ public class StartBattleCommand : CommandBase
 
     public override void Execute()
     {
-        ManageTimersRegular(3);
+        if (!ChessManager.Local)
+        {
+            ManageTimersRegular(3);
+        }
     }
 }

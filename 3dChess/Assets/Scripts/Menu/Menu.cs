@@ -26,6 +26,13 @@ public class Menu : MonoBehaviour
         GetSaves();
         Loads.SetActive(false);
         I_Interactive.rectTransform.anchoredPosition = new Vector3(-I_Interactive.rectTransform.anchoredPosition.x, I_Interactive.rectTransform.anchoredPosition.y, 0);
+        Tween.LocalScale(Title.rectTransform, Vector3.one * 1.25f, 1.5f, 0, Tween.EaseInOut, Tween.LoopType.PingPong);
+    }
+
+    private void Start()
+    {
+        AudioManager.StopAll();
+        AudioManager.Play("menu");
     }
 
     public void PlayNewSave()
@@ -109,5 +116,14 @@ public class Menu : MonoBehaviour
     public void QuitGame()
     {
         Application.Quit();
+    }
+
+    public void ActivateTab(CanvasGroup canvasGroup)
+    {
+        canvasGroup.Activate();
+    }
+    public void DeActivateTab(CanvasGroup canvasGroup)
+    {
+        canvasGroup.Deactivate();
     }
 }

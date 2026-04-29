@@ -22,6 +22,7 @@ public class ButtonPressAnimation : MonoBehaviour, IPointerDownHandler, IPointer
             return;
         }
 
+        AudioManager.Play("UiButton");
         Tween.LocalScale(gameObject.transform, new Vector3(0.75f, 0.75f, 0.75f), 0.15f, 0, Tween.EaseOut); 
     }
 

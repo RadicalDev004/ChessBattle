@@ -23,7 +23,7 @@ public class Trainer : MonoBehaviour
 
     private void Awake()
     {
-        NpcInfo.Create(false);
+        //NpcInfo.Create(false);
         InitialRotation = transform.rotation;
 
         var data = JsonUtility.FromJson<TrainerInventory>(JsonInventory);
@@ -39,6 +39,8 @@ public class Trainer : MonoBehaviour
     {
         Name = data.Name;
         Defeated = data.Defeated;
+
+        print("Creating trainer " + Name + " with defeated status: " + Defeated);
 
         NpcInfo.Create(Defeated);
     }

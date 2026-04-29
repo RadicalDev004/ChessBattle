@@ -43,6 +43,8 @@ public class ChessManager : MonoBehaviour
 
     private void Start()
     {
+        AudioManager.StopAll();
+
         Ended = false;
         MyInfo.SetActive(false);
         if (Local)
@@ -96,6 +98,8 @@ public class ChessManager : MonoBehaviour
 
     public void PreparePieces(InventoryData white, InventoryData black)
     {
+        AudioManager.FadeIn("chess", 2);
+
         var oppName = Side ? black.Name : white.Name;
         T_OppName.text = oppName;
         T_MyName.text = Side ? white.Name : black.Name;
@@ -176,12 +180,12 @@ public class ChessManager : MonoBehaviour
         }
 
         string json = JsonConvert.SerializeObject(saveData, Formatting.Indented);
-        PlayerPrefs.SetString("save" + PlayerPrefs.GetString("currentSave"), json);
+        PlayerPrefs.SetString("save" + PlayerPrefs.GetInt("currentSave"), json);
     }
 
     public void PrepareLocalMatch()
     {
-        string white = PlayerPrefs.GetString("save" + PlayerPrefs.GetString("currentSave"));
+        string white = PlayerPrefs.GetString("save" + PlayerPrefs.GetInt("currentSave"));
         print("deserializing white data:\n" + white);
         string black = PlayerPrefs.GetString("trainer");
 
@@ -201,7 +205,7 @@ public class ChessManager : MonoBehaviour
 
     public string GetMyInventoryData()
     {
-        string white = PlayerPrefs.GetString("save" + PlayerPrefs.GetString("currentSave"));
+        string white = PlayerPrefs.GetString("save" + PlayerPrefs.GetInt("currentSave"));
 
         SaveData whiteData = JsonConvert.DeserializeObject<SaveData>(white);
         saveData = whiteData;

@@ -19,7 +19,10 @@ public class SwitchPieceCommand : CommandBase
 
     public override void Execute()
     {
-        ManageTimersBefore();
+        if(!ChessManager.Local)
+        {
+            ManageTimersBefore();
+        }
         Ref.BattleManager.SwitchPiece(Side, OriginalPieceInd, NewPieceInd);
     }
 }

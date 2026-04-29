@@ -17,7 +17,10 @@ public class UsePotionCommand : CommandBase
 
     public override void Execute()
     {
-        ManageTimersBefore();
+        if(!ChessManager.Local)
+        {
+            ManageTimersBefore();
+        }
         Ref.BattleManager.ProcessPotion(Side, PieceInd, PotionInd);
     }
 }

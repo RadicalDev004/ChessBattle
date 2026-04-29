@@ -38,11 +38,18 @@ public class PlayerBehaviour : MonoBehaviour
     public Transform InSkiChair;
     public bool IsInSkiChair = false;
 
+    public int CurrentBiome;
+
     private void Start()
     {
         Movement = GetComponent<Movement>();
         InitialCameraPos = Camera.transform.localPosition;
         InitialCameraRotation = Camera.transform.rotation;
+
+        AudioManager.StopAll();
+
+        CurrentBiome = GetBiome();
+        PlayBiomeSound();
     }
 
 
@@ -87,6 +94,15 @@ public class PlayerBehaviour : MonoBehaviour
                 current.IsInside = false;
             }
             HouseInRange.EnterHouse();
+        }
+
+        
+        int biome = GetBiome();
+        if(biome != CurrentBiome)
+        {
+            string previous = "biome" + CurrentBiome;
+            CurrentBiome = biome;
+            PlayBiomeSound(previous);
         }
     }
 
@@ -201,6 +217,7 @@ public class PlayerBehaviour : MonoBehaviour
                 print("AA\n" + JsonConvert.SerializeObject(trainer.GetInventory()));
 
                 PlayerPrefsExtentions.SetBool("online", false);
+
                 PlayerPrefs.SetString("trainer", JsonConvert.SerializeObject(trainer.GetInventory(), Formatting.Indented));
                 SceneManager.LoadScene("Chess");
             });
@@ -255,5 +272,47 @@ public class PlayerBehaviour : MonoBehaviour
     public bool HasPieceInLayout(EntityData piece)
     {
         return PiecesInventory.Any(p => p == piece);
+    }
+
+    public int GetBiome()
+    {
+        if(House.InsideAnyHouse)
+        {
+            return 4;
+        }
+        if (transform.position.x > 0 && transform.position.z > 0)
+        {
+            return 0;
+        }
+        else if(transform.position.x < 0 && transform.position.z > 0)
+        {
+            return 1;
+        }
+        else if(transform.position.x < 0 && transform.position.z < 0)
+        {
+            return 2;
+        }
+        else if (transform.position.x > 0 && transform.position.z < 0)
+        {
+            return 3;
+        }
+
+        return -1;
+    }
+
+    public void PlayBiomeSound(string previous = null)
+    {
+        if(CurrentBiome == -1)
+        {
+            AudioManager.StopAll();
+            return;
+        }
+        if (previous != null)
+        {
+            if (previous == "biome" + CurrentBiome)
+                return;
+            AudioManager.FadeOut(previous, 2);
+        }
+        AudioManager.FadeIn("biome" + CurrentBiome, 2);
     }
 }

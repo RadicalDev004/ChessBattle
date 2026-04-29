@@ -65,6 +65,9 @@ public class BattleManager : MonoBehaviour
 
     public void StartBattle(Piece attacker, Piece defender, Tile t, bool sideStarting)
     {
+        AudioManager.FadeOut("chess", 1);
+        AudioManager.FadeIn("battle", 1);
+
         SideStarting = sideStarting;
 
         BasicUI.SetActive(false);
@@ -140,6 +143,9 @@ public class BattleManager : MonoBehaviour
 
         ChessManager.IncreaseTurn();
         BasicUI.SetActive(true);
+
+        AudioManager.FadeOut("battle", 1);
+        AudioManager.FadeIn("chess", 1);
     }
 
     public GameObject CreateNewShowPiece(GameObject p, Transform pos)

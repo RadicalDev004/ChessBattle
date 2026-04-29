@@ -19,6 +19,8 @@ public class OnlineManager : MonoBehaviour
 
         ChessManager.Local = !flag;
 
+        print("Online mode: " + flag);
+
         if(flag)
         {
             MyId = Guid.NewGuid();
@@ -36,6 +38,10 @@ public class OnlineManager : MonoBehaviour
             {
                 JoinPrivateRoom(PlayerPrefs.GetString("privateCode"));
             }
+        }
+        else
+        {
+            Ref.LoadingScreen.Toggle(false);
         }
     }
 

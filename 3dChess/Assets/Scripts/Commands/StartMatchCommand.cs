@@ -14,6 +14,10 @@ public class StartMatchCommand : CommandBase
     public override void Execute()
     {
         Ref.LoadingScreen.Toggle(false);
-        ManageTimersRegular();
+
+        if (!ChessManager.Local)
+        {
+            ManageTimersRegular();
+        }
     }
 }
