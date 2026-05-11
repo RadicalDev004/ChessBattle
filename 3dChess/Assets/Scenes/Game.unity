@@ -7603,6 +7603,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Mark
   Zone: 3
+  InventoryPoints: 350
   JsonInventory: "{\r\n  \"Pieces\": [\r\n    {\r\n      \"PieceIndex\": 53,\r\n     
     \"Position\": 1,\r\n      \"Level\": 15,\r\n      \"MoveIndexes\": [13, 45, 90]\r\n   
     },\r\n    {\r\n      \"PieceIndex\": 52,\r\n      \"Position\": 6,\r\n      \"Level\":
@@ -17260,6 +17261,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Ranger
   Zone: 1
+  InventoryPoints: 100
   JsonInventory: "{\r\n  \"Pieces\": [\r\n    {\r\n      \"PieceIndex\": 29,\r\n     
     \"Position\": 9,\r\n      \"Level\": 7,\r\n      \"MoveIndexes\": [3, 37]\r\n   
     },\r\n    {\r\n      \"PieceIndex\": 15,\r\n      \"Position\": 18,\r\n     
@@ -66795,6 +66797,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Jenny
   Zone: 1
+  InventoryPoints: 85
   JsonInventory: "{\r\n  \"Pieces\": [\r\n    {\r\n      \"PieceIndex\": 23,\r\n     
     \"Position\": 10,\r\n      \"Level\": 7,\r\n      \"MoveIndexes\": [6, 53]\r\n   
     },\r\n    {\r\n      \"PieceIndex\": 8,\r\n      \"Position\": 17,\r\n      \"Level\":
@@ -68011,6 +68014,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Businessman
   Zone: 0
+  InventoryPoints: 65
   JsonInventory: "{\r\n  \"Pieces\": [\r\n    {\r\n      \"PieceIndex\": 17,\r\n     
     \"Position\": 11,\r\n      \"Level\": 6,\r\n      \"MoveIndexes\": [6]\r\n   
     },\r\n    {\r\n      \"PieceIndex\": 7,\r\n      \"Position\": 18,\r\n      \"Level\":
@@ -81212,6 +81216,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Eschimo
   Zone: 3
+  InventoryPoints: 215
   JsonInventory: "{\r\n  \"Pieces\": [\r\n    {\r\n      \"PieceIndex\": 41,\r\n     
     \"Position\": 4,\r\n      \"Level\": 15,\r\n      \"MoveIndexes\": [5, 45, 96]\r\n   
     },\r\n    {\r\n      \"PieceIndex\": 16,\r\n      \"Position\": 9,\r\n      \"Level\":
@@ -82773,6 +82778,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Santa
   Zone: 3
+  InventoryPoints: 390
   JsonInventory: "{\r\n  \"Pieces\": [\r\n    {\r\n      \"PieceIndex\": 59,\r\n     
     \"Position\": 3,\r\n      \"Level\": 15,\r\n      \"MoveIndexes\": [14, 62, 95]\r\n   
     },\r\n    {\r\n      \"PieceIndex\": 46,\r\n      \"Position\": 8,\r\n      \"Level\":
@@ -83913,6 +83919,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Nicolas
   Zone: 0
+  InventoryPoints: 80
   JsonInventory: "{\r\n  \"Pieces\": [\r\n    {\r\n      \"PieceIndex\": 23,\r\n     
     \"Position\": 9,\r\n      \"Level\": 7,\r\n      \"MoveIndexes\": [6, 53]\r\n   
     },\r\n    {\r\n      \"PieceIndex\": 14,\r\n      \"Position\": 18,\r\n     
@@ -96363,7 +96370,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Name: Yeti
-  Zone: 0
+  Zone: 3
+  InventoryPoints: 500
   JsonInventory: "{\r\n  \"Pieces\": [\r\n    {\r\n      \"PieceIndex\": 65,\r\n     
     \"Position\": 5,\r\n      \"Level\": 20,\r\n      \"MoveIndexes\": [16, 48, 89,
     34]\r\n    },\r\n    {\r\n      \"PieceIndex\": 58,\r\n      \"Position\": 8,\r\n     
@@ -106619,6 +106627,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Maria
   Zone: 2
+  InventoryPoints: 155
   JsonInventory: "{\r\n  \"Pieces\": [\r\n    {\r\n      \"PieceIndex\": 29,\r\n     
     \"Position\": 9,\r\n      \"Level\": 7,\r\n      \"MoveIndexes\": [3, 37]\r\n   
     },\r\n    {\r\n      \"PieceIndex\": 26,\r\n      \"Position\": 14,\r\n     
@@ -120825,6 +120834,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Nurse
   Zone: 0
+  InventoryPoints: 45
   JsonInventory: "{\r\n  \"Pieces\": [\r\n    {\r\n      \"PieceIndex\": 5,\r\n     
     \"Position\": 11,\r\n      \"Level\": 4,\r\n      \"MoveIndexes\": [0]\r\n   
     },\r\n    {\r\n      \"PieceIndex\": 6,\r\n      \"Position\": 19,\r\n      \"Level\":
@@ -136437,6 +136447,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Surfer
   Zone: 2
+  InventoryPoints: 205
   JsonInventory: "{\r\n  \"Pieces\": [\r\n    {\r\n      \"PieceIndex\": 41,\r\n     
     \"Position\": 18,\r\n      \"Level\": 15,\r\n      \"MoveIndexes\": [5, 45, 74]\r\n   
     },\r\n    {\r\n      \"PieceIndex\": 43,\r\n      \"Position\": 10,\r\n     
@@ -136622,6 +136633,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Raymond
   Zone: 2
+  InventoryPoints: 260
   JsonInventory: "{\r\n  \"Pieces\": [\r\n    {\r\n      \"PieceIndex\": 53,\r\n     
     \"Position\": 6,\r\n      \"Level\": 15,\r\n      \"MoveIndexes\": [13, 45, 91]\r\n   
     },\r\n    {\r\n      \"PieceIndex\": 51,\r\n      \"Position\": 13,\r\n     
@@ -162662,6 +162674,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Carlos
   Zone: 2
+  InventoryPoints: 180
   JsonInventory: "{\r\n  \"Pieces\": [\r\n    {\r\n      \"PieceIndex\": 35,\r\n     
     \"Position\": 10,\r\n      \"Level\": 7,\r\n      \"MoveIndexes\": [9, 44]\r\n   
     },\r\n    {\r\n      \"PieceIndex\": 7,\r\n      \"Position\": 16,\r\n      \"Level\":
@@ -175734,6 +175747,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Miner
   Zone: 1
+  InventoryPoints: 130
   JsonInventory: "{\r\n  \"Pieces\": [\r\n    {\r\n      \"PieceIndex\": 17,\r\n     
     \"Position\": 8,\r\n      \"Level\": 7,\r\n      \"MoveIndexes\": [6, 42]\r\n   
     },\r\n    {\r\n      \"PieceIndex\": 22,\r\n      \"Position\": 10,\r\n     
@@ -185701,6 +185715,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Hiker
   Zone: 1
+  InventoryPoints: 115
   JsonInventory: "{\r\n  \"Pieces\": [\r\n    {\r\n      \"PieceIndex\": 17,\r\n     
     \"Position\": 11,\r\n      \"Level\": 7,\r\n      \"MoveIndexes\": [6, 38]\r\n   
     },\r\n    {\r\n      \"PieceIndex\": 7,\r\n      \"Position\": 17,\r\n      \"Level\":
@@ -210836,6 +210851,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Doctor
   Zone: 0
+  InventoryPoints: 55
   JsonInventory: "{\r\n  \"Pieces\": [\r\n    {\r\n      \"PieceIndex\": 11,\r\n     
     \"Position\": 10,\r\n      \"Level\": 5,\r\n      \"MoveIndexes\": [4]\r\n   
     },\r\n    {\r\n      \"PieceIndex\": 12,\r\n      \"Position\": 14,\r\n     
@@ -218322,6 +218338,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Matthew
   Zone: 0
+  InventoryPoints: 35
   JsonInventory: "{\r\n  \"Pieces\": [\r\n    {\r\n      \"PieceIndex\": 5,\r\n     
     \"Position\": 12,\r\n      \"Level\": 3,\r\n      \"MoveIndexes\": [0]\r\n   
     }\r\n  ],\r\n  \"Potions\": []\r\n}"
@@ -224316,6 +224333,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Zion
   Zone: 2
+  InventoryPoints: 230
   JsonInventory: "{\r\n  \"Pieces\": [\r\n    {\r\n      \"PieceIndex\": 47,\r\n     
     \"Position\": 25,\r\n      \"Level\": 15,\r\n      \"MoveIndexes\": [8, 43, 93]\r\n   
     },\r\n    {\r\n      \"PieceIndex\": 26,\r\n      \"Position\": 6,\r\n      \"Level\":
@@ -237864,6 +237882,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Fisherman
   Zone: 1
+  InventoryPoints: 150
   JsonInventory: "{\r\n  \"Pieces\": [\r\n    {\r\n      \"PieceIndex\": 23,\r\n     
     \"Position\": 9,\r\n      \"Level\": 15,\r\n      \"MoveIndexes\": [6, 53, 84]\r\n   
     },\r\n    {\r\n      \"PieceIndex\": 15,\r\n      \"Position\": 14,\r\n     
@@ -239554,7 +239573,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Name: Skier
-  Zone: 2
+  Zone: 3
+  InventoryPoints: 275
   JsonInventory: "{\r\n  \"Pieces\": [\r\n    {\r\n      \"PieceIndex\": 35,\r\n     
     \"Position\": 2,\r\n      \"Level\": 15,\r\n      \"MoveIndexes\": [9, 44, 88]\r\n   
     },\r\n    {\r\n      \"PieceIndex\": 22,\r\n      \"Position\": 8,\r\n      \"Level\":

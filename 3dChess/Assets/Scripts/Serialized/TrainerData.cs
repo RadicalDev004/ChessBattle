@@ -8,6 +8,7 @@ public class TrainerData
 {
     public string Name;
     public bool Defeated;
+    public string JsonInventory;
 
     public TrainerData() { }
 
@@ -15,5 +16,7 @@ public class TrainerData
     {
         Defeated = t.Defeated;
         Name = t.Name;
+
+        JsonInventory = t.JsonInventory;
     }
 }

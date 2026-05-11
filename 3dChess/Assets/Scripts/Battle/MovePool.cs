@@ -204,9 +204,9 @@ new Move("Miasma Veil",       "A dense, toxic shroud that relentlessly drains.",
             Debug.LogWarning($"Requested move {movesForVariant[index].Name} at index {index} does not match variant '{variant}'. Returning null.");
             return null;
         }
-        return movesForVariant[index];
+        return movesForVariant[index].Copy();
     }
-    public static Move GetRandomMove(string variant, EntityData.Type type, int moveInd)
+    public static Move GetRandomMove(string variant, EntityData.Type type, int moveInd, MoveRarity? forcedRarity = null)
     {
         var rng = new System.Random();
 
@@ -240,12 +240,23 @@ new Move("Miasma Veil",       "A dense, toxic shroud that relentlessly drains.",
             else candidates = allMovesForVariant;
         }
 
-        var rarity = PickRarityWithAvailability(candidates, rng, moveInd);
+        var rarity = forcedRarity ?? PickRarityWithAvailability(candidates, rng, moveInd);
 
         var sameRarity = candidates.Where(m => m.Rarity == rarity).ToList();
+        if (sameRarity.Count == 0) sameRarity = GetNearestRarityCandidates(candidates, rarity);
         if (sameRarity.Count == 0) sameRarity = candidates;
+        if (sameRarity.Count == 0) return null;
 
-        return sameRarity[rng.Next(0, sameRarity.Count)];
+        return sameRarity[rng.Next(0, sameRarity.Count)].Copy();
+    }
+
+    private static List<Move> GetNearestRarityCandidates(List<Move> candidates, MoveRarity rarity)
+    {
+        return candidates
+            .OrderBy(m => Mathf.Abs((int)m.Rarity - (int)rarity))
+            .GroupBy(m => Mathf.Abs((int)m.Rarity - (int)rarity))
+            .FirstOrDefault()
+            ?.ToList() ?? new List<Move>();
     }
 
     private static MoveType GetPreferredType(EntityData.Type type)

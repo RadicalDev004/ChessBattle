@@ -150,7 +150,7 @@ public class PlayerBehaviour : MonoBehaviour
             Movement.Sit();
             GetComponent<CharacterController>().enabled = false;
 
-            transform.SetParent(other.transform);
+            transform.SetParent(other.transform.parent);
             transform.SetLocalPositionAndRotation(InSkiChair.localPosition, InSkiChair.localRotation);
             transform.GetChild(0).localRotation = InSkiChair.GetChild(0).localRotation;
 

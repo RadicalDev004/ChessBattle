@@ -18,8 +18,10 @@ public class LoadUI : MonoBehaviour
         T_Name.text = PlayerPrefs.GetString($"save{ind}_name", "Unknown");
         T_LastPlayedAt.text = "Last played " + PlayerPrefs.GetString($"save{ind}_lastPlayedAt", "Unknown");
 
-        SaveData data = JsonUtility.FromJson<SaveData>(PlayerPrefs.GetString($"save{ind}", ""));
-        T_Trainers.text = $"Trainers: {data.TrainerData.Count(td => td.Defeated)}/20";
+        string saveJson = PlayerPrefs.GetString($"save{ind}", "");
+        SaveData data = string.IsNullOrWhiteSpace(saveJson) ? null : JsonUtility.FromJson<SaveData>(saveJson);
+        int defeatedTrainers = data?.TrainerData?.Count(td => td.Defeated) ?? 0;
+        T_Trainers.text = $"Trainers: {defeatedTrainers}/20";
 
         GetComponent<Button>().onClick.AddListener(() =>
         {
