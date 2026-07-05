@@ -156,6 +156,7 @@ public class SaveManager : MonoBehaviour
         starterKing.Moves = MovePool.Pool
             .Where(m => m.Rarity == MoveRarity.Common && m.Variants.Contains(starterKing.Variant))
             .OrderByDescending(m => m.Type == MoveType.Attack)
+            .Take(4)
             .Select(m => m.Copy())
             .ToList();
 

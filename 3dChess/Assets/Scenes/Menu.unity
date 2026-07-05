@@ -2262,7 +2262,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '-'
+  m_text: Rate Game
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e61a893c60f504348a32a7c6faf74543, type: 2}
   m_sharedMaterial: {fileID: -983963976949613959, guid: e61a893c60f504348a32a7c6faf74543, type: 2}

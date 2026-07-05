@@ -13,15 +13,14 @@ using UnityEngine.UI;
 public class ChessManager : MonoBehaviour
 {
     public InventoryData WhiteData, BlackData;
+    private InventoryData WhiteFullData, BlackFullData;
     public SaveData saveData;
     public string OpponentName;
     public InventoryData MyData { get { return Side ? WhiteData : BlackData; }  }
-
     public List<Piece> OrgPieces = new();
 
     public static int Turn = 0;
 
-    public List<EntityData> AllWhites = new();
     public List<Piece> WhitePieces = new(), BlackPieces = new();
     public ChessUI ChessUI;
     public static bool Local = true;
@@ -68,17 +67,21 @@ public class ChessManager : MonoBehaviour
     {
         MyInfo.SetActive(true);
         print("Starting chess match with side:\n" + side);
-        string mine = GetMyInventoryData();
+        var myFullInventory = GetMyFullInventory();
+        var myBattleInventory = CreateBattleInventory(myFullInventory);
+        var incomingInventory = NormalizeInventory(JsonConvert.DeserializeObject<InventoryData>(incoming));
         Side = side;
 
         if(!side)
         {
             Ref.ManageTiles.SwitchBoard();
-            PreparePieces(JsonConvert.DeserializeObject<InventoryData>(incoming), JsonConvert.DeserializeObject<InventoryData>(mine));
+            PreparePieces(incomingInventory, myBattleInventory);
+            BlackFullData = myFullInventory;
         }
         else
         {
-            PreparePieces(JsonConvert.DeserializeObject<InventoryData>(mine), JsonConvert.DeserializeObject<InventoryData>(incoming));
+            PreparePieces(myBattleInventory, incomingInventory);
+            WhiteFullData = myFullInventory;
         }
 
         if(Side)
@@ -100,6 +103,14 @@ public class ChessManager : MonoBehaviour
     {
         AudioManager.FadeIn("chess", 2);
 
+        white ??= new InventoryData();
+        black ??= new InventoryData();
+
+        white.Pieces ??= new();
+        white.Potions ??= new();
+        black.Pieces ??= new();
+        black.Potions ??= new();
+
         var oppName = Side ? black.Name : white.Name;
         T_OppName.text = oppName;
         T_MyName.text = Side ? white.Name : black.Name;
@@ -111,20 +122,13 @@ public class ChessManager : MonoBehaviour
             I_Avatar.Fit(100);
         }     
 
-        WhiteData = white;
-        BlackData = black;
+        WhiteFullData = white;
+        BlackFullData = black;
+        WhiteData = CreateBattleInventory(white);
+        BlackData = CreateBattleInventory(black);
 
-        WhiteData.Pieces = WhiteData.Pieces.Where(p => p.Position > -1).ToList();
-        WhiteData.Potions = WhiteData.Potions.Where(p => p.Position > -1).ToList();
-
-        BlackData.Pieces = BlackData.Pieces.Where(p => p.Position > -1).ToList();
-        BlackData.Potions = BlackData.Potions.Where(p => p.Position > -1).ToList();
-
-        foreach (var piece in white.Pieces)
+        foreach (var piece in WhiteData.Pieces)
         {
-            AllWhites.Add(piece);
-            if (piece.Position == -1) continue;
-
             var p = Instantiate(OrgPieces[(int)piece.PieceType]);
             p.gameObject.SetActive(true);
             p.Create(piece.Position, piece);
@@ -137,10 +141,8 @@ public class ChessManager : MonoBehaviour
             WhitePieces.Add(p);
         }
 
-        foreach (var piece in black.Pieces)
+        foreach (var piece in BlackData.Pieces)
         {
-            if (piece.Position == -1) continue;
-
             var p = Instantiate(OrgPieces[(int)piece.PieceType]);
             p.gameObject.SetActive(true);
             p.side = false;
@@ -163,8 +165,11 @@ public class ChessManager : MonoBehaviour
     public void EndMatch(bool winner)
     {
         Ended = true;
-        saveData.InventoryData.Pieces = AllWhites;
-        saveData.InventoryData.Potions = WhiteData.Potions;
+        var myFullData = Side ? WhiteFullData : BlackFullData;
+        saveData.InventoryData ??= new InventoryData();
+        saveData.InventoryData.Pieces = myFullData?.Pieces ?? new();
+        saveData.InventoryData.Potions = myFullData?.Potions ?? new();
+
         if (Local)
             saveData.TrainerData.Find(t => t.Name == OpponentName).Defeated = winner;
 
@@ -192,11 +197,9 @@ public class ChessManager : MonoBehaviour
         SaveData whiteData = JsonConvert.DeserializeObject<SaveData>(white);
         saveData = whiteData;
 
-        InventoryData whiteInventory = whiteData.InventoryData;
-        whiteInventory.Pieces = whiteInventory.Pieces.Where(p => p.Position > -1).ToList();
-        whiteInventory.Potions = whiteInventory.Potions.Where(p => p.Position > -1).ToList();
+        InventoryData whiteInventory = NormalizeInventory(whiteData.InventoryData);
 
-        InventoryData blackInventory = JsonConvert.DeserializeObject<InventoryData>(black);
+        InventoryData blackInventory = NormalizeInventory(JsonConvert.DeserializeObject<InventoryData>(black));
         OpponentName = blackInventory.Name;
 
         WhiteData = whiteInventory;
@@ -205,14 +208,7 @@ public class ChessManager : MonoBehaviour
 
     public string GetMyInventoryData()
     {
-        string white = PlayerPrefs.GetString("save" + PlayerPrefs.GetInt("currentSave"));
-
-        SaveData whiteData = JsonConvert.DeserializeObject<SaveData>(white);
-        saveData = whiteData;
-
-        InventoryData whiteInventory = whiteData.InventoryData;
-        whiteInventory.Pieces = whiteInventory.Pieces.Where(p => p.Position > -1).ToList();
-        return JsonConvert.SerializeObject(whiteInventory);
+        return JsonConvert.SerializeObject(CreateBattleInventory(GetMyFullInventory()));
     }
 
     public void GiveUp()
@@ -299,7 +295,11 @@ public class ChessManager : MonoBehaviour
     public void RemovePotionAtIndex(bool side, int potionInd)
     {
         var inventory = side ? WhiteData : BlackData;
-        inventory.Potions.Remove(GetPotionByIndex(side, potionInd));
+        var potion = GetPotionByIndex(side, potionInd);
+        inventory.Potions.Remove(potion);
+
+        var fullInventory = side ? WhiteFullData : BlackFullData;
+        fullInventory?.Potions?.Remove(potion);
     }
 
     public static bool IsMyTurn()
@@ -316,5 +316,35 @@ public class ChessManager : MonoBehaviour
     {
         Debug.LogWarning("Chess turn increased");
         Turn++;
+    }
+
+    private InventoryData CreateBattleInventory(InventoryData inventory)
+    {
+        inventory = NormalizeInventory(inventory);
+
+        return new InventoryData
+        {
+            Name = inventory.Name,
+            Pieces = inventory.Pieces.Where(p => p.Position > -1).ToList(),
+            Potions = inventory.Potions.Where(p => p.Position > -1).ToList()
+        };
+    }
+
+    private InventoryData GetMyFullInventory()
+    {
+        string white = PlayerPrefs.GetString("save" + PlayerPrefs.GetInt("currentSave"));
+
+        SaveData whiteData = JsonConvert.DeserializeObject<SaveData>(white);
+        saveData = whiteData;
+
+        return NormalizeInventory(whiteData.InventoryData);
+    }
+
+    private InventoryData NormalizeInventory(InventoryData inventory)
+    {
+        inventory ??= new InventoryData();
+        inventory.Pieces ??= new();
+        inventory.Potions ??= new();
+        return inventory;
     }
 }

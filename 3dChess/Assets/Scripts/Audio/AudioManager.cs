@@ -34,6 +34,8 @@ public class AudioManager : MonoBehaviour
 
     public static void UpdateVolume()
     {
+        if(Instance == null)
+            return;
         foreach (Sound s in Instance.sounds)
         {
             s.source.volume = s.effect ? (float)PlayerPrefs.GetFloat("fxs", 1) : (float)PlayerPrefs.GetFloat("volume", 1);
